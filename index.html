@@ -568,6 +568,62 @@
     .certificate.portrait .detail-text { line-height: 1.5; }
     .certificate.F4.portrait .detail-text { line-height: 1.42; font-size: 0.95em; }
 
+    .signature-area.single-signer {
+      justify-content: center;
+      cursor: default;
+    }
+
+    .signature-area.single-signer:hover {
+      box-shadow: none;
+    }
+
+    .signature-area.single-signer .signature.kepsek-signature {
+      width: 52%;
+      max-width: 60%;
+      cursor: grab;
+      transform: translate(var(--kepsek-offset-x, 0px), var(--kepsek-offset-y, 0px));
+      transition: transform 0.15s ease;
+    }
+
+    .signature-area.single-signer .signature.kepsek-signature:hover {
+      box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.25);
+      border-radius: 6px;
+    }
+
+    .signature-area.single-signer .signature.kepsek-signature.dragging {
+      cursor: grabbing;
+      box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.5);
+      opacity: 0.95;
+    }
+
+    .signature.guru-signature.is-hidden {
+      display: none !important;
+    }
+
+    .kepsek-pos-controls {
+      background: #f3f3f3;
+      border-radius: 12px;
+      padding: 12px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .toggle-row input {
+      width: auto;
+      margin: 0;
+    }
+
     .signature-area {
       display: flex;
       justify-content: space-between;
@@ -642,9 +698,16 @@
     }
 
     .sign-line {
-      width: 85%;
+      width: 100%;
       border-bottom: 2px solid #333;
-      margin: 0.25em 0;
+      margin: 0.25em 0 0;
+      box-sizing: border-box;
+    }
+
+    .sign-name-line-wrap {
+      display: inline-block;
+      max-width: 100%;
+      text-align: center;
     }
 
     .custom-fields-display {
@@ -679,6 +742,7 @@
       line-height: 1.3;
       text-align: center;
       word-break: break-word;
+      display: block;
     }
 
     .sign-nip {
@@ -729,11 +793,12 @@
       }
     }
   </style>
+  <script src="html2canvas.min.js"></script>
 </head>
 <body>
   <div class="file-protocol-banner no-print" id="fileProtocolBanner">
-    <strong>Tip:</strong> Untuk hasil terbaik, jalankan <code>JALANKAN.bat</code> lalu buka
-    <code>http://localhost:8080</code>. Buka langsung file ini juga sudah didukung.
+    <strong>Mode offline:</strong> Buka <code>index.html</code> langsung sudah didukung (termasuk Download PNG).
+    Pastikan file <code>html2canvas.min.js</code> ada di folder yang sama.
   </div>
   <h2 class="app-title">🎖️ Pembuat Sertifikat Anak SD + PNG + Ruang TTD</h2>
   <div class="main-container">
@@ -771,10 +836,20 @@
 
       <div class="signature-input-section">
         <strong style="font-size:15px;">✍️ Tanda Tangan</strong>
+        <label class="toggle-row"><input type="checkbox" id="useGuruToggle" checked> Gunakan Guru Pembimbing</label>
         <div class="form-group"><label>👤 Nama Kepala Sekolah</label><input type="text" id="kepsekNama" placeholder="Budi Santoso, S.Pd."></div>
         <div class="form-group"><label>🆔 NIP Kepala Sekolah</label><input type="text" id="kepsekNip" placeholder="19651234 198703 1 001"></div>
-        <div class="form-group"><label>👤 Nama Guru Pembimbing</label><input type="text" id="guruNama" placeholder="Ratna Dewi, S.Pd."></div>
-        <div class="form-group"><label>🆔 NIP Guru Pembimbing</label><input type="text" id="guruNip" placeholder="19820711 200604 2 005"></div>
+        <div id="guruFieldsGroup">
+          <div class="form-group"><label>👤 Nama Guru Pembimbing</label><input type="text" id="guruNama" placeholder="Ratna Dewi, S.Pd."></div>
+          <div class="form-group"><label>🆔 NIP Guru Pembimbing</label><input type="text" id="guruNip" placeholder="19820711 200604 2 005"></div>
+        </div>
+        <div id="kepsekPosControls" class="kepsek-pos-controls">
+          <strong style="font-size:14px;">📍 Posisi TTD Kepala Sekolah</strong>
+          <div class="form-group"><label id="kepsekPosXLabel">↔️ Horizontal (0 px)</label><input type="range" id="kepsekPosX" min="-120" max="120" value="0" step="2"></div>
+          <div class="form-group"><label id="kepsekPosYLabel">↕️ Vertikal (0 px)</label><input type="range" id="kepsekPosY" min="-60" max="60" value="0" step="2"></div>
+          <button type="button" id="resetKepsekPos" class="secondary" style="width:100%;">↩️ Reset Posisi Kepala Sekolah</button>
+          <small class="template-upload-note">Klik &amp; geser blok Kepala Sekolah langsung di pratinjau.</small>
+        </div>
       </div>
 
       <div class="custom-fields-section">
@@ -795,7 +870,7 @@
           <label id="signSpaceLabel">↕️ Tinggi Ruang TTD (55%)</label>
           <input type="range" id="signSpaceSlider" min="30" max="100" value="55" step="1">
         </div>
-        <div class="form-group">
+        <div class="form-group" id="signOffsetControl">
           <label id="signOffsetLabel">↕️ Posisi Blok TTD (0 px)</label>
           <input type="range" id="signOffsetSlider" min="-60" max="60" value="0" step="2">
           <small class="template-upload-note">Geser ke kiri = naik, ke kanan = turun. Bisa juga klik &amp; geser blok TTD di pratinjau.</small>
@@ -841,18 +916,22 @@
         </div>
 
         <div class="signature-area" id="signatureArea">
-          <div class="signature">
+          <div class="signature kepsek-signature" id="kepsekSignature">
             <span class="sign-role">Kepala Sekolah</span>
             <div class="sign-space" id="kepsekSignSpace"></div>
-            <span class="sign-name" id="kepsekDisplayNama">Budi Santoso, S.Pd.</span>
-            <div class="sign-line"></div>
+            <div class="sign-name-line-wrap">
+              <span class="sign-name" id="kepsekDisplayNama">Budi Santoso, S.Pd.</span>
+              <div class="sign-line"></div>
+            </div>
             <span class="sign-nip" id="kepsekDisplayNip">NIP. 19651234 198703 1 001</span>
           </div>
-          <div class="signature">
+          <div class="signature guru-signature" id="guruSignature">
             <span class="sign-role">Guru Pembimbing</span>
             <div class="sign-space" id="guruSignSpace"></div>
-            <span class="sign-name" id="guruDisplayNama">Ratna Dewi, S.Pd.</span>
-            <div class="sign-line"></div>
+            <div class="sign-name-line-wrap">
+              <span class="sign-name" id="guruDisplayNama">Ratna Dewi, S.Pd.</span>
+              <div class="sign-line"></div>
+            </div>
             <span class="sign-nip" id="guruDisplayNip">NIP. 19820711 200604 2 005</span>
           </div>
         </div>
@@ -918,6 +997,17 @@
       const signOffsetSlider = document.getElementById('signOffsetSlider');
       const signOffsetLabel = document.getElementById('signOffsetLabel');
       const signatureArea = document.getElementById('signatureArea');
+      const kepsekSignature = document.getElementById('kepsekSignature');
+      const guruSignature = document.getElementById('guruSignature');
+      const useGuruToggle = document.getElementById('useGuruToggle');
+      const guruFieldsGroup = document.getElementById('guruFieldsGroup');
+      const kepsekPosControls = document.getElementById('kepsekPosControls');
+      const signOffsetControl = document.getElementById('signOffsetControl');
+      const kepsekPosX = document.getElementById('kepsekPosX');
+      const kepsekPosY = document.getElementById('kepsekPosY');
+      const kepsekPosXLabel = document.getElementById('kepsekPosXLabel');
+      const kepsekPosYLabel = document.getElementById('kepsekPosYLabel');
+      const resetKepsekPosBtn = document.getElementById('resetKepsekPos');
       const textSizeSlider = document.getElementById('textSizeSlider');
       const textSizeLabel = document.getElementById('textSizeLabel');
       const kepsekSignSpace = document.getElementById('kepsekSignSpace');
@@ -1224,10 +1314,11 @@
           overflow = Math.max(overflow, certBody.scrollHeight - certBody.clientHeight);
         }
 
-        [certHeader, certBody, signatureArea].forEach(function(el) {
-          if (!el) return;
+        [certHeader, certBody, signatureArea, kepsekSignature].forEach(function(el) {
+          if (!el || (el === kepsekSignature && isUsingGuru())) return;
           const rect = el.getBoundingClientRect();
           overflow = Math.max(overflow, rect.bottom - contentRect.bottom);
+          overflow = Math.max(overflow, contentRect.top - rect.top);
         });
 
         if (certHeader && certBody) {
@@ -1240,7 +1331,58 @@
           if (bodySigGap < 0) overflow = Math.max(overflow, -bodySigGap);
         }
 
+        if (!isUsingGuru() && kepsekSignature && signatureArea) {
+          const sigRect = kepsekSignature.getBoundingClientRect();
+          overflow = Math.max(overflow, sigRect.bottom - contentRect.bottom);
+          overflow = Math.max(overflow, sigRect.right - contentRect.right);
+          overflow = Math.max(overflow, contentRect.left - sigRect.left);
+        }
+
         return overflow;
+      }
+
+      let kepsekPosition = { x: 0, y: 0 };
+
+      function isUsingGuru() {
+        return !useGuruToggle || useGuruToggle.checked;
+      }
+
+      function updateKepsekPosLabels() {
+        if (kepsekPosXLabel) kepsekPosXLabel.textContent = '↔️ Horizontal (' + kepsekPosition.x + ' px)';
+        if (kepsekPosYLabel) kepsekPosYLabel.textContent = '↕️ Vertikal (' + kepsekPosition.y + ' px)';
+      }
+
+      function applyKepsekPosition() {
+        certificateDiv.style.setProperty('--kepsek-offset-x', kepsekPosition.x + 'px');
+        certificateDiv.style.setProperty('--kepsek-offset-y', kepsekPosition.y + 'px');
+        if (kepsekPosX) kepsekPosX.value = String(kepsekPosition.x);
+        if (kepsekPosY) kepsekPosY.value = String(kepsekPosition.y);
+        updateKepsekPosLabels();
+      }
+
+      function resetKepsekPosition() {
+        kepsekPosition = { x: 0, y: 0 };
+        applyKepsekPosition();
+        fitContentLayout({ lockSignSpace: true });
+        updatePrintSettings();
+      }
+
+      function applyGuruVisibility() {
+        const useGuru = isUsingGuru();
+        if (guruFieldsGroup) guruFieldsGroup.style.display = useGuru ? '' : 'none';
+        if (guruSignature) guruSignature.classList.toggle('is-hidden', !useGuru);
+        if (signatureArea) signatureArea.classList.toggle('single-signer', !useGuru);
+        if (kepsekPosControls) kepsekPosControls.style.display = useGuru ? 'none' : 'flex';
+        if (signOffsetControl) signOffsetControl.style.display = useGuru ? '' : 'none';
+        if (useGuru) {
+          certificateDiv.style.setProperty('--kepsek-offset-x', '0px');
+          certificateDiv.style.setProperty('--kepsek-offset-y', '0px');
+          if (kepsekSignature) kepsekSignature.classList.remove('dragging');
+        } else {
+          applyKepsekPosition();
+        }
+        fitContentLayout({ lockSignSpace: true });
+        updatePrintSettings();
       }
 
       function getSignOffsetPx() {
@@ -1515,38 +1657,95 @@
         });
       }
 
+      if (useGuruToggle) {
+        useGuruToggle.addEventListener('change', applyGuruVisibility);
+      }
+
+      if (kepsekPosX) {
+        kepsekPosX.addEventListener('input', function() {
+          kepsekPosition.x = parseInt(this.value, 10);
+          applyKepsekPosition();
+          fitContentLayout({ lockSignSpace: true });
+          updatePrintSettings();
+        });
+      }
+
+      if (kepsekPosY) {
+        kepsekPosY.addEventListener('input', function() {
+          kepsekPosition.y = parseInt(this.value, 10);
+          applyKepsekPosition();
+          fitContentLayout({ lockSignSpace: true });
+          updatePrintSettings();
+        });
+      }
+
+      if (resetKepsekPosBtn) {
+        resetKepsekPosBtn.addEventListener('click', resetKepsekPosition);
+      }
+
       (function initSignatureDrag() {
         if (!signatureArea || !certificateDiv) return;
 
         let dragging = false;
+        let dragMode = 'area';
+        let startX = 0;
         let startY = 0;
         let startOffset = 0;
+        let startKepsek = { x: 0, y: 0 };
 
         function onPointerDown(e) {
           if (e.button !== undefined && e.button !== 0) return;
+
+          if (!isUsingGuru()) {
+            if (!kepsekSignature || (!kepsekSignature.contains(e.target) && e.target !== kepsekSignature)) return;
+            dragMode = 'kepsek';
+            startX = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
+            startY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
+            startKepsek = { x: kepsekPosition.x, y: kepsekPosition.y };
+            kepsekSignature.classList.add('dragging');
+          } else {
+            dragMode = 'area';
+            startY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
+            startOffset = getSignOffsetPx();
+            signatureArea.classList.add('dragging');
+          }
+
           dragging = true;
-          startY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
-          startOffset = getSignOffsetPx();
-          signatureArea.classList.add('dragging');
           e.preventDefault();
         }
 
         function onPointerMove(e) {
           if (!dragging) return;
-          const clientY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
-          const delta = clientY - startY;
-          const next = Math.max(-60, Math.min(60, startOffset + Math.round(delta / 2) * 2));
-          signOffsetSlider.value = String(next);
-          applySignAreaOffset();
-          fitContentLayout();
+
+          if (dragMode === 'kepsek') {
+            const clientX = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
+            const clientY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
+            kepsekPosition.x = Math.max(-120, Math.min(120, startKepsek.x + Math.round((clientX - startX) / 2) * 2));
+            kepsekPosition.y = Math.max(-60, Math.min(60, startKepsek.y + Math.round((clientY - startY) / 2) * 2));
+            applyKepsekPosition();
+            fitContentLayout({ lockSignSpace: true });
+          } else {
+            const clientY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
+            const delta = clientY - startY;
+            const next = Math.max(-60, Math.min(60, startOffset + Math.round(delta / 2) * 2));
+            signOffsetSlider.value = String(next);
+            applySignAreaOffset();
+            fitContentLayout();
+          }
+
           e.preventDefault();
         }
 
         function onPointerUp() {
           if (!dragging) return;
           dragging = false;
-          signatureArea.classList.remove('dragging');
-          updatePrintSettings();
+          if (dragMode === 'kepsek') {
+            if (kepsekSignature) kepsekSignature.classList.remove('dragging');
+            updatePrintSettings();
+          } else {
+            signatureArea.classList.remove('dragging');
+            updatePrintSettings();
+          }
         }
 
         signatureArea.addEventListener('mousedown', onPointerDown);
@@ -1804,72 +2003,59 @@
       }
 
       function showFileProtocolWarning() {
-        if (isFileProtocol() && window.self === window.top) {
-          document.getElementById('fileProtocolBanner').style.display = 'block';
+        const banner = document.getElementById('fileProtocolBanner');
+        if (!banner || !isFileProtocol() || window.self !== window.top) return;
+        if (typeof window.html2canvas !== 'function') {
+          banner.style.display = 'block';
+          banner.innerHTML = '<strong>Perhatian:</strong> File <code>html2canvas.min.js</code> tidak ditemukan. ' +
+            'Letakkan di folder yang sama dengan <code>index.html</code> agar Download PNG berfungsi offline.';
         }
       }
 
-      function copyInlineStyles(source, target) {
-        const win = source.ownerDocument.defaultView;
-        if (!win) return;
-        const computed = win.getComputedStyle(source);
-        let cssText = '';
-        for (let i = 0; i < computed.length; i++) {
-          const name = computed[i];
-          cssText += name + ':' + computed.getPropertyValue(name) + ';';
+      function prepareCertificateClone(clonedDoc) {
+        const cert = clonedDoc.getElementById('certificate');
+        if (cert) {
+          cert.style.transform = 'none';
         }
-        target.setAttribute('style', cssText);
-        const srcChildren = source.children;
-        const tgtChildren = target.children;
-        for (let i = 0; i < srcChildren.length; i++) {
-          if (tgtChildren[i]) copyInlineStyles(srcChildren[i], tgtChildren[i]);
+
+        const bgLayer = clonedDoc.getElementById('certBgLayer');
+        if (bgLayer) {
+          const win = clonedDoc.defaultView;
+          const bgImg = win ? win.getComputedStyle(bgLayer).backgroundImage : '';
+          if (bgImg && bgImg !== 'none') {
+            const urlMatch = bgImg.match(/url\(["']?(.*?)["']?\)/);
+            if (urlMatch && urlMatch[1]) {
+              const img = clonedDoc.createElement('img');
+              img.src = urlMatch[1];
+              img.alt = '';
+              img.setAttribute('style', 'position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:0;display:block;');
+              bgLayer.innerHTML = '';
+              bgLayer.appendChild(img);
+              bgLayer.style.backgroundImage = 'none';
+            }
+          }
         }
-      }
 
-      function exportPngNative(element, scale) {
-        scale = scale || 2;
-        const w = element.offsetWidth;
-        const h = element.offsetHeight;
-        const clone = element.cloneNode(true);
-        copyInlineStyles(element, clone);
-        clone.style.transform = 'none';
-        clone.style.maxWidth = w + 'px';
-        clone.style.width = w + 'px';
-        clone.style.height = h + 'px';
-
-        const xhtml = 'http://www.w3.org/1999/xhtml';
-        const wrapper = document.createElement('div');
-        wrapper.setAttribute('xmlns', xhtml);
-        wrapper.setAttribute('style', 'width:' + w + 'px;height:' + h + 'px;margin:0;padding:0;overflow:hidden;background:#fff;');
-        wrapper.appendChild(clone);
-
-        const svgMarkup = '<svg xmlns="http://www.w3.org/2000/svg" width="' + (w * scale) + '" height="' + (h * scale) + '">' +
-          '<foreignObject x="0" y="0" width="' + w + '" height="' + h + '" transform="scale(' + scale + ')">' +
-          new XMLSerializer().serializeToString(wrapper) +
-          '</foreignObject></svg>';
-
-        const blob = new Blob([svgMarkup], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-
-        return new Promise(function(resolve, reject) {
-          const img = new Image();
-          img.onload = function() {
-            const canvas = document.createElement('canvas');
-            canvas.width = w * scale;
-            canvas.height = h * scale;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
-            URL.revokeObjectURL(url);
-            resolve(canvas);
-          };
-          img.onerror = function(err) {
-            URL.revokeObjectURL(url);
-            reject(err);
-          };
-          img.src = url;
+        clonedDoc.querySelectorAll('.signature-area, .logo-container, .signature.kepsek-signature').forEach(function(el) {
+          el.classList.remove('dragging');
+          el.style.cursor = 'default';
+          el.style.boxShadow = 'none';
+          el.style.opacity = '1';
         });
+      }
+
+      function getHtml2CanvasOptions(certElement, scale, useForeignObject) {
+        return {
+          scale: scale || 2,
+          backgroundColor: '#ffffff',
+          allowTaint: true,
+          useCORS: true,
+          logging: false,
+          width: certElement.offsetWidth,
+          height: certElement.offsetHeight,
+          foreignObjectRendering: !!useForeignObject,
+          onclone: prepareCertificateClone
+        };
       }
 
       function loadHtml2Canvas() {
@@ -1879,10 +2065,34 @@
             return;
           }
           const script = document.createElement('script');
-          script.src = 'html2canvas.min.js';
-          script.onload = function() { resolve(window.html2canvas); };
-          script.onerror = function() { reject(new Error('html2canvas gagal dimuat')); };
+          try {
+            script.src = new URL('html2canvas.min.js', window.location.href).href;
+          } catch (e) {
+            script.src = 'html2canvas.min.js';
+          }
+          script.onload = function() {
+            if (typeof window.html2canvas === 'function') {
+              resolve(window.html2canvas);
+            } else {
+              reject(new Error('html2canvas tidak tersedia'));
+            }
+          };
+          script.onerror = function() {
+            reject(new Error('html2canvas.min.js tidak ditemukan di folder yang sama dengan index.html'));
+          };
           document.head.appendChild(script);
+        });
+      }
+
+      function captureCertificateCanvas(certElement, scale) {
+        return loadHtml2Canvas().then(function(html2canvas) {
+          return html2canvas(certElement, getHtml2CanvasOptions(certElement, scale, false));
+        }).catch(function(firstErr) {
+          return loadHtml2Canvas().then(function(html2canvas) {
+            return html2canvas(certElement, getHtml2CanvasOptions(certElement, scale, true));
+          }).catch(function() {
+            throw firstErr;
+          });
         });
       }
 
@@ -1890,48 +2100,38 @@
         const link = document.createElement('a');
         link.download = 'sertifikat.png';
         link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
       }
 
       function downloadCertificatePng() {
         const certElement = document.getElementById('certificate');
+        const downloadBtn = document.getElementById('downloadPngBtn');
         const prevTransform = certElement.style.transform;
+        const prevBtnText = downloadBtn ? downloadBtn.textContent : '';
         certElement.style.transform = '';
 
-        function restoreTransform() {
+        function restoreUi() {
           certElement.style.transform = prevTransform;
+          if (downloadBtn) {
+            downloadBtn.disabled = false;
+            downloadBtn.textContent = prevBtnText;
+          }
         }
 
-        if (isFileProtocol()) {
-          exportPngNative(certElement, 2).then(function(canvas) {
-            restoreTransform();
-            triggerPngDownload(canvas);
-          }).catch(function() {
-            restoreTransform();
-            alert('Download PNG gagal di file://.\n\nJalankan JALANKAN.bat lalu buka http://localhost:8080\nAtau gunakan Cetak / PDF.');
-          });
-          return;
+        if (downloadBtn) {
+          downloadBtn.disabled = true;
+          downloadBtn.textContent = '⏳ Menyimpan PNG...';
         }
 
-        loadHtml2Canvas().then(function(html2canvas) {
-          return html2canvas(certElement, {
-            scale: 2,
-            backgroundColor: '#ffffff',
-            allowTaint: true,
-            useCORS: true,
-            logging: false
-          });
-        }).then(function(canvas) {
-          restoreTransform();
+        captureCertificateCanvas(certElement, 2).then(function(canvas) {
+          restoreUi();
           triggerPngDownload(canvas);
         }).catch(function(error) {
-          restoreTransform();
+          restoreUi();
           console.error('Gagal mengunduh PNG:', error);
-          exportPngNative(certElement, 2).then(function(canvas) {
-            triggerPngDownload(canvas);
-          }).catch(function() {
-            alert('Gagal mengunduh gambar. Jalankan JALANKAN.bat lalu buka http://localhost:8080');
-          });
+          alert('Download PNG gagal.\n\nPastikan file html2canvas.min.js ada di folder yang sama dengan index.html.\n\nAlternatif: gunakan tombol Cetak / PDF.');
         });
       }
 
@@ -1957,6 +2157,7 @@
       setPaperSize('A4');
       updateTextSizeLabel();
       applySignAreaOffset();
+      applyGuruVisibility();
     })();
   </script>
 </body>
