@@ -350,6 +350,7 @@
       align-items: flex-start;
       width: 100%;
       max-width: 100%;
+      overflow: hidden;
     }
 
     .certificate {
@@ -391,12 +392,13 @@
         background-position: center;
         background-repeat: no-repeat;
         z-index: 0;
+        overflow: hidden;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
 
-    .cert-bg-layer.bg-cover {
-      background-size: cover;
+    .cert-bg-layer.bg-custom {
+      background-size: 100% 100%;
     }
 
     .cert-bg-overlay {
@@ -633,9 +635,10 @@
 
     .sign-space {
       width: 85%;
-      min-height: 2em;
+      min-height: 0;
+      height: auto;
       margin: 0.15em 0 0;
-      flex-shrink: 1;
+      flex-shrink: 0;
     }
 
     .sign-line {
@@ -738,9 +741,9 @@
       <h3>📝 Data Peserta & Lomba</h3>
       <div class="form-group"><label>🏫 Nama Sekolah</label><input type="text" id="schoolName" placeholder="SD Nusantara Bangsa"></div>
       <div class="form-group"><label>👤 Nama Peserta</label><input type="text" id="studentName" placeholder="Aisyah Putri" required></div>
-      <div class="form-group"><label>📚 Kelas</label><select id="studentClass"><option value="">-- Pilih Kelas --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+      <div class="form-group"><label>📚 Kelas</label><input type="text" id="studentClass" placeholder="Contoh: 4"></div>
       <div class="form-group"><label>🏆 Nama Lomba</label><input type="text" id="eventName" placeholder="Lomba Mewarnai Nasional"></div>
-      <div class="form-group"><label>🥇 Prestasi</label><select id="achievement"><option value="">-- Pilih Prestasi --</option><option>Juara 1</option><option>Juara 2</option><option>Juara 3</option><option>Juara Harapan 1</option><option>Juara Harapan 2</option><option>Peserta Terbaik</option><option>Peserta</option></select></div>
+      <div class="form-group"><label>🥇 Prestasi</label><input type="text" id="achievement" placeholder="Contoh: Juara 1"></div>
       <div class="form-group"><label>📅 Tanggal</label><input type="date" id="eventDate"></div>
       <div class="form-group"><label>📍 Tempat</label><input type="text" id="eventPlace" placeholder="Aula Kecamatan Ceria"></div>
       <div class="form-group"><label>🖼️ Logo (opsional)</label><input type="file" id="logoUpload" accept="image/*"></div>
@@ -763,7 +766,7 @@
           <label>🔆 Transparansi Overlay (agar teks terbaca)</label>
           <input type="range" id="overlaySlider" min="0" max="80" value="20" step="5">
         </div>
-        <p class="template-upload-note">Pilih template bawaan atau upload gambar latar sendiri (JPG/PNG).</p>
+        <p class="template-upload-note">Pilih template bawaan atau upload gambar latar sendiri (JPG/PNG). Gambar upload otomatis disesuaikan ke ukuran kertas yang dipilih.</p>
       </div>
 
       <div class="signature-input-section">
@@ -788,7 +791,10 @@
           <label id="textSizeLabel">🔤 Ukuran Teks Sertifikat (115%)</label>
           <input type="range" id="textSizeSlider" min="85" max="150" value="115" step="5">
         </div>
-        <div class="form-group"><label>↕️ Tinggi Ruang TTD</label><input type="range" id="signSpaceSlider" min="30" max="100" value="55" step="2"></div>
+        <div class="form-group">
+          <label id="signSpaceLabel">↕️ Tinggi Ruang TTD (55%)</label>
+          <input type="range" id="signSpaceSlider" min="30" max="100" value="55" step="1">
+        </div>
         <div class="form-group">
           <label id="signOffsetLabel">↕️ Posisi Blok TTD (0 px)</label>
           <input type="range" id="signOffsetSlider" min="-60" max="60" value="0" step="2">
@@ -860,9 +866,9 @@
     (function() {
       const schoolInput = document.getElementById('schoolName');
       const nameInput = document.getElementById('studentName');
-      const classSelect = document.getElementById('studentClass');
+      const classInput = document.getElementById('studentClass');
       const eventInput = document.getElementById('eventName');
-      const achievementSelect = document.getElementById('achievement');
+      const achievementInput = document.getElementById('achievement');
       const dateInput = document.getElementById('eventDate');
       const placeInput = document.getElementById('eventPlace');
       const logoUpload = document.getElementById('logoUpload');
@@ -908,6 +914,7 @@
       const orientationSelect = document.getElementById('orientationSelect');
       const paperSizeSelect = document.getElementById('paperSizeSelect');
       const signSpaceSlider = document.getElementById('signSpaceSlider');
+      const signSpaceLabel = document.getElementById('signSpaceLabel');
       const signOffsetSlider = document.getElementById('signOffsetSlider');
       const signOffsetLabel = document.getElementById('signOffsetLabel');
       const signatureArea = document.getElementById('signatureArea');
@@ -1026,10 +1033,12 @@
       }
 
       function refreshTemplateBackground() {
-        certBgLayer.classList.remove('bg-cover');
+        certBgLayer.classList.remove('bg-custom');
+        certBgLayer.style.backgroundSize = '';
         if (currentTemplateId === 'custom' && customTemplateImage) {
-          certBgLayer.classList.add('bg-cover');
+          certBgLayer.classList.add('bg-custom');
           certBgLayer.style.backgroundImage = "url('" + customTemplateImage + "')";
+          certBgLayer.style.backgroundSize = '100% 100%';
           return;
         }
         const tpl = CERT_TEMPLATES.find(function(t) { return t.id === currentTemplateId; });
@@ -1115,8 +1124,9 @@
           card.classList.remove('active');
         });
         certificateDiv.classList.add('has-bg-template');
-        certBgLayer.classList.add('bg-cover');
+        certBgLayer.classList.add('bg-custom');
         certBgLayer.style.backgroundImage = "url('" + dataUrl + "')";
+        certBgLayer.style.backgroundSize = '100% 100%';
         overlayControl.style.display = 'flex';
         setOverlayOpacity(parseInt(overlaySlider.value, 10));
         applyPreviewDimensions();
@@ -1291,53 +1301,70 @@
         return Math.max(8, Math.min(22, size));
       }
 
-      function getMaxSignSpace(certH) {
-        const portrait = currentOrientation === 'portrait';
-        const f4 = currentPaperSize === 'F4';
-        let ratio = portrait ? 0.065 : 0.09;
-        if (f4 && portrait) ratio = 0.055;
-        return Math.max(22, Math.round(certH * ratio));
-      }
-
-      function setSignSpaceHeight(px, certH) {
+      function computeSignSpacePx(sliderVal, certH) {
         const h = certH || certificateDiv.offsetHeight || 530;
-        const maxAllowed = getMaxSignSpace(h);
-        const minAllowed = currentOrientation === 'portrait' ? 22 : 24;
-        const target = Math.min(px, maxAllowed);
-        kepsekSignSpace.style.minHeight = Math.max(minAllowed, target) + 'px';
-        guruSignSpace.style.minHeight = Math.max(minAllowed, target) + 'px';
-        kepsekSignSpace.style.maxHeight = maxAllowed + 'px';
-        guruSignSpace.style.maxHeight = maxAllowed + 'px';
-        return Math.max(minAllowed, target);
+        const minPct = currentOrientation === 'portrait' ? 0.035 : 0.04;
+        const maxPct = currentOrientation === 'portrait' ? 0.12 : 0.16;
+        const t = Math.max(0, Math.min(1, (sliderVal - 30) / 70));
+        const pct = minPct + t * (maxPct - minPct);
+        return Math.max(14, Math.round(h * pct));
       }
 
-      function fitContentLayout() {
+      function updateSignSpaceLabel(px) {
+        if (!signSpaceLabel || !signSpaceSlider) return;
+        signSpaceLabel.textContent = '↕️ Tinggi Ruang TTD (' + signSpaceSlider.value + '% · ' + px + 'px)';
+      }
+
+      function getSignSpaceMm() {
+        const sliderVal = parseInt(signSpaceSlider.value, 10);
+        const certH = certificateDiv.offsetHeight || 530;
+        const px = computeSignSpacePx(sliderVal, certH);
+        const page = getPageDimensionsMm();
+        return Math.max(8, ((px / certH) * page.h)).toFixed(1);
+      }
+
+      function setSignSpaceHeight(sliderVal, certH) {
+        const target = computeSignSpacePx(sliderVal, certH);
+        kepsekSignSpace.style.minHeight = target + 'px';
+        kepsekSignSpace.style.height = target + 'px';
+        guruSignSpace.style.minHeight = target + 'px';
+        guruSignSpace.style.height = target + 'px';
+        kepsekSignSpace.style.maxHeight = 'none';
+        guruSignSpace.style.maxHeight = 'none';
+        updateSignSpaceLabel(target);
+        return target;
+      }
+
+      function fitContentLayout(options) {
+        options = options || {};
         const certContent = certificateDiv.querySelector('.cert-content');
         const certW = certificateDiv.offsetWidth;
         const certH = certificateDiv.offsetHeight;
         if (!certContent || !certW || !certH) return;
 
         const sliderVal = parseInt(signSpaceSlider.value, 10);
+        let effectiveSlider = sliderVal;
         const preferredFont = computeBaseFontSize(certW, certH);
         let fontSize = preferredFont;
         let blockScale = 1;
         const minFont = Math.max(7, preferredFont * 0.68);
         const minBlockScale = 0.7;
-        const minSign = currentOrientation === 'portrait' ? 20 : 22;
-        let signH = setSignSpaceHeight(sliderVal, certH);
+        const minSlider = 30;
+
+        setSignSpaceHeight(effectiveSlider, certH);
 
         for (let pass = 0; pass < 48; pass++) {
           certificateDiv.style.setProperty('--cert-font-size', fontSize.toFixed(2) + 'px');
           certificateDiv.style.setProperty('--cert-block-scale', blockScale.toFixed(3));
-          signH = setSignSpaceHeight(signH, certH);
+          setSignSpaceHeight(effectiveSlider, certH);
 
           const overflow = measureContentOverflow();
           const hOverflow = certContent.scrollWidth - certContent.clientWidth;
 
           if (overflow <= 2 && hOverflow <= 2) break;
 
-          if (overflow > 2 && signH > minSign) {
-            signH = Math.max(minSign, signH - Math.max(2, Math.ceil(overflow * 0.45)));
+          if (!options.lockSignSpace && overflow > 2 && effectiveSlider > minSlider) {
+            effectiveSlider = Math.max(minSlider, effectiveSlider - 3);
             continue;
           }
 
@@ -1350,6 +1377,10 @@
             fontSize = Math.max(minFont, fontSize - 0.3);
             continue;
           }
+        }
+
+        if (options.lockSignSpace) {
+          setSignSpaceHeight(sliderVal, certH);
         }
       }
 
@@ -1406,7 +1437,7 @@
         const padBottom = (currentPaperSize === 'F4' && currentOrientation === 'portrait') ? 16 : 14;
         const basePrintFont = (currentPaperSize === 'F4' && currentOrientation === 'portrait') ? 14 : 16;
         const printFont = scaledPrintPx(basePrintFont);
-        const signSpaceMm = (currentOrientation === 'portrait') ? 14 : 18;
+        const signSpaceMm = getSignSpaceMm();
         const padLeft = 18;
 
         styleEl.textContent = `
@@ -1471,7 +1502,9 @@
       paperSizeSelect.addEventListener('change', e => setPaperSize(e.target.value));
 
       signSpaceSlider.addEventListener('input', function() {
-        fitContentLayout();
+        setSignSpaceHeight(parseInt(this.value, 10), certificateDiv.offsetHeight);
+        fitContentLayout({ lockSignSpace: true });
+        updatePrintSettings();
       });
 
       if (signOffsetSlider) {
@@ -1537,8 +1570,8 @@
         displayName.textContent = nameInput.value.trim() || 'Nama Peserta';
 
         const school = schoolInput.value.trim();
-        const kelas = classSelect.value;
-        const achievement = achievementSelect.value;
+        const kelas = classInput.value.trim();
+        const achievement = achievementInput.value.trim();
         const event = eventInput.value.trim();
 
         let line1Parts = [];
@@ -1652,7 +1685,7 @@
 
       document.getElementById('addCustomField').addEventListener('click', ()=>{ customFields.push({label:'',value:''}); renderCustomFieldInputs(); updateCertificateData(); });
 
-      [schoolInput,nameInput,classSelect,eventInput,achievementSelect,dateInput,placeInput,kepsekNamaInput,kepsekNipInput,guruNamaInput,guruNipInput].forEach(el=>{ el.addEventListener('input',updateCertificateData); el.addEventListener('change',updateCertificateData); });
+      [schoolInput,nameInput,classInput,eventInput,achievementInput,dateInput,placeInput,kepsekNamaInput,kepsekNipInput,guruNamaInput,guruNipInput].forEach(el=>{ el.addEventListener('input',updateCertificateData); el.addEventListener('change',updateCertificateData); });
 
       logoUpload.addEventListener('change', function(e){
         const file=e.target.files[0];
@@ -1915,7 +1948,7 @@
           templateGrid.innerHTML = '<p style="color:#b71c1c;font-size:13px;">Template gagal dimuat. Refresh halaman.</p>';
         }
       }
-      nameInput.value='Aisyah Putri'; schoolInput.value='SD Pelita Bangsa'; classSelect.value='4'; eventInput.value='Lomba Puisi Nasional'; achievementSelect.value='Juara 1'; dateInput.value='2026-05-20'; placeInput.value='Gedung Serbaguna Merdeka';
+      nameInput.value='Aisyah Putri'; schoolInput.value='UPT SD NEGERI 067953'; classInput.value='4'; eventInput.value='Lomba Puisi Nasional'; achievementInput.value='Juara 1'; dateInput.value='2026-05-20'; placeInput.value='UPT SD NEGERI 067953';
       kepsekNamaInput.value='Budi Santoso, S.Pd.'; kepsekNipInput.value='19651234 198703 1 001'; guruNamaInput.value='Ratna Dewi, S.Pd.'; guruNipInput.value='19820711 200604 2 005';
       borderColorInput.value='#2e7d32'; outlineColorInput.value='#ffd700'; ribbonColorInput.value='#1b5e20'; titleColorInput.value='#004d40';
       updateCertificateData();
