@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Pembuat Sertifikat Anak SD + Download PNG + Ruang TTD</title>
+  <script>
+    (function() {
+      if (location.protocol === 'file:' && window.self !== window.top) {
+        try { window.top.location.replace(window.location.href); } catch (e) {}
+      }
+    })();
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    h2.app-title {
+      margin-bottom: 25px;
+      color: #b71c1c;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .main-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      width: 100%;
+      max-width: 1450px;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 960px) {
+      body { padding: 12px; }
+      h2.app-title { font-size: 22px; text-align: center; justify-content: center; }
+      .main-container { flex-direction: column; align-items: stretch; gap: 16px; }
+      .input-panel { width: 100%; max-height: none; }
+      .certificate-wrapper { width: 100%; padding: 12px; }
+    }
+
+    .input-panel {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+      padding: 25px;
+      width: 400px;
+      max-width: 100%;
+      min-width: 0;
+      max-height: 90vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .input-panel h3 {
+      color: #b71c1c;
+      border-bottom: 2px solid #ffcdd2;
+      padding-bottom: 6px;
+      margin-bottom: 5px;
+      font-size: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .input-panel input:not([type="range"]):not([type="color"]),
+    .input-panel select {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+    }
+
+    input, select, button {
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.2s;
+      font-family: inherit;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #b71c1c;
+      box-shadow: 0 0 0 3px rgba(183,28,28,0.1);
+    }
+
+    button {
+      background: #b71c1c;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s;
+      padding: 12px;
+    }
+
+    button:hover {
+      background: #8e0000;
+    }
+
+    button.secondary {
+      background: #fff;
+      color: #b71c1c;
+      border: 2px solid #b71c1c;
+    }
+
+    button.secondary:hover {
+      background: #ffebee;
+    }
+
+    .custom-fields-section,
+    .template-custom-section,
+    .template-picker-section,
+    .signature-input-section {
+      background: #fafafa;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    .custom-fields-section {
+      overflow-x: clip;
+      overflow-y: visible;
+    }
+
+    #customFieldsContainer {
+      width: 100%;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-x: clip;
+    }
+
+    .custom-field-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 32px;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .custom-field-row input {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      width: 100%;
+      min-height: 80px;
+    }
+
+    @media (max-width: 480px) {
+      .template-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .template-card {
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.2s;
+      background: white;
+    }
+
+    .template-card:hover {
+      border-color: #b71c1c;
+      transform: translateY(-1px);
+    }
+
+    .template-card.active {
+      border-color: #b71c1c;
+      box-shadow: 0 0 0 2px rgba(183,28,28,0.15);
+    }
+
+    .template-thumb {
+      width: 100%;
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 56px;
+    }
+
+    .template-card span {
+      display: block;
+      padding: 6px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #444;
+      text-align: center;
+    }
+
+    .template-upload-note {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .logo-position-controls {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .file-protocol-banner {
+      display: none;
+      width: 100%;
+      max-width: 1450px;
+      background: #fff3e0;
+      border: 2px solid #ff9800;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      color: #5d4037;
+      font-size: 14px;
+      line-height: 1.6;
+      box-sizing: border-box;
+    }
+
+    .file-protocol-banner strong {
+      color: #e65100;
+    }
+
+    .file-protocol-banner code {
+      background: #ffe0b2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .remove-btn {
+      background: #e0e0e0;
+      color: #b71c1c;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      max-width: 32px;
+      padding: 0;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    .remove-btn:hover {
+      background: #ffcdd2;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .action-buttons button {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    /* Pratinjau di layar */
+    .certificate-wrapper {
+      background: #e0e0e0;
+      padding: 25px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      overflow: auto;
+      box-sizing: border-box;
+    }
+
+    .preview-size-label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 10px;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+    }
+
+    .certificate-scale-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .certificate {
+      background: #ffffff;
+      border: 3px solid #2e7d32;
+      padding: 0;
+      position: relative;
+      outline: 3px solid #ffd700;
+      outline-offset: 4px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: #222;
+      transition: width 0.25s ease, height 0.25s ease;
+      width: var(--cert-preview-w, 750px);
+      height: var(--cert-preview-h, 530px);
+      min-width: 0;
+      min-height: 0;
+      max-width: 100%;
+      overflow: hidden;
+      box-sizing: border-box;
+      font-size: var(--cert-font-size, 15px);
+      flex-shrink: 0;
+    }
+
+    .certificate.has-bg-template {
+      border: none;
+      outline: none;
+      box-shadow: none;
+    }
+
+      .cert-bg-layer {
+        position: absolute;
+        inset: 0;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+    .cert-bg-layer.bg-cover {
+      background-size: cover;
+    }
+
+    .cert-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      z-index: 1;
+      pointer-events: none;
+      transition: background 0.3s;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .cert-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      align-items: stretch;
+      justify-items: center;
+      padding: var(--cert-pad-top, 4.5%) var(--cert-pad-x, 7%) var(--cert-pad-bottom, 8.5%);
+      box-sizing: border-box;
+      overflow: hidden;
+      gap: var(--cert-section-gap, 0.4em);
+    }
+
+    .certificate.has-bg-template .cert-content {
+      padding: var(--cert-pad-top, 5%) var(--cert-pad-x, 8%) var(--cert-pad-bottom, 10%);
+    }
+
+    .cert-title {
+      font-size: calc(var(--cert-title-scale, 2.75em) * var(--cert-block-scale, 1));
+      font-weight: bold;
+      color: #004d40;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: color 0.3s;
+      line-height: 1.1;
+    }
+
+    .certificate.portrait .cert-title { font-size: calc(var(--cert-title-scale, 2.4em) * var(--cert-block-scale, 1)); }
+
+    .cert-header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 0;
+      margin-bottom: 0;
+      flex-shrink: 0;
+      align-self: stretch;
+    }
+
+    .ribbon {
+      background: #1b5e20;
+      color: white;
+      font-size: calc(var(--cert-ribbon-scale, 1.45em) * var(--cert-block-scale, 1));
+      font-weight: bold;
+      padding: 0.5em 1.6em;
+      border-radius: 30px;
+      letter-spacing: 0.12em;
+      font-family: 'Segoe UI', sans-serif;
+      white-space: nowrap;
+      transition: background 0.3s;
+      margin-bottom: 0.35em;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .logo-container {
+      position: absolute;
+      top: 4%;
+      left: 4.5%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 45%;
+      z-index: 5;
+      cursor: grab;
+      touch-action: none;
+      padding: 4px;
+      border-radius: 6px;
+      transition: box-shadow 0.2s;
+    }
+
+    .logo-container:hover {
+      box-shadow: 0 0 0 2px rgba(183, 28, 28, 0.35);
+    }
+
+    .logo-container.dragging {
+      cursor: grabbing;
+      box-shadow: 0 0 0 2px rgba(183, 28, 28, 0.6);
+      opacity: 0.92;
+    }
+
+    @media print {
+      .logo-container:hover,
+      .logo-container.dragging {
+        box-shadow: none;
+        opacity: 1;
+      }
+    }
+
+    .logo-container img { height: 3.2em; width: auto; object-fit: contain; }
+    .garuda-text { font-size: 0.72em; color: #555; font-weight: bold; font-family: 'Segoe UI', sans-serif; letter-spacing: 0.5px; }
+
+    .cert-subtitle {
+      font-size: 1.05em;
+      color: #444;
+      margin: 0.2em 0 0.15em;
+      font-style: italic;
+      flex-shrink: 0;
+    }
+
+    .certificate.portrait .cert-subtitle { font-size: 1em; }
+
+    .cert-body {
+      flex: none;
+      width: 100%;
+      min-height: 0;
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.15em 1%;
+      overflow: visible;
+      align-self: center;
+    }
+
+    .recipient-name {
+      font-size: calc(var(--cert-name-scale, 2.65em) * var(--cert-block-scale, 1));
+      font-weight: bold;
+      color: #1565c0;
+      margin: 0.2em 0 0.35em;
+      text-decoration: underline;
+      text-decoration-color: #1565c0;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.2em;
+      font-family: 'Georgia', serif;
+      line-height: 1.15;
+      max-width: 100%;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      hyphens: auto;
+      flex-shrink: 0;
+    }
+
+    .certificate.portrait .recipient-name { font-size: calc(var(--cert-name-scale, 2.3em) * var(--cert-block-scale, 1)); }
+
+    .detail-text {
+      font-size: 1em;
+      line-height: var(--cert-detail-lh, 1.55);
+      margin: 0.12em 0;
+      max-width: 96%;
+      color: #222;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      flex-shrink: 0;
+    }
+
+    .certificate.portrait .detail-text { line-height: 1.5; }
+    .certificate.F4.portrait .detail-text { line-height: 1.42; font-size: 0.95em; }
+
+    .signature-area {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      font-size: 0.88em;
+      color: #333;
+      gap: 3%;
+      flex-wrap: nowrap;
+      flex-shrink: 0;
+      align-items: flex-end;
+      align-self: stretch;
+      transform: translateY(var(--sign-offset-y, 0px));
+      transition: transform 0.15s ease;
+      cursor: grab;
+      touch-action: none;
+      padding: 4px 0;
+      border-radius: 6px;
+    }
+
+    .signature-area:hover {
+      box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.25);
+    }
+
+    .signature-area.dragging {
+      cursor: grabbing;
+      box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.5);
+      opacity: 0.95;
+    }
+
+    @media print {
+      .signature-area {
+        transition: none;
+        cursor: default;
+        box-shadow: none !important;
+        opacity: 1 !important;
+      }
+    }
+
+    .certificate.portrait .signature-area {
+      flex-direction: column;
+      gap: 0.8em;
+      align-items: center;
+      padding-top: 0;
+    }
+
+    .certificate.F4.portrait .signature-area {
+      gap: 0.55em;
+      font-size: 0.82em;
+    }
+
+    .signature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 42%;
+      min-height: 0;
+      flex: 1;
+      max-width: 48%;
+    }
+
+    .certificate.portrait .signature { width: 75%; max-width: 80%; }
+
+    .sign-space {
+      width: 85%;
+      min-height: 2em;
+      margin: 0.15em 0 0;
+      flex-shrink: 1;
+    }
+
+    .sign-line {
+      width: 85%;
+      border-bottom: 2px solid #333;
+      margin: 0.25em 0;
+    }
+
+    .custom-fields-display {
+      margin-top: 0.4em;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em;
+      justify-content: center;
+      font-size: 0.9em;
+      max-width: 100%;
+    }
+
+    .custom-item {
+      background: #f5f5f5;
+      padding: 5px 15px;
+      border-radius: 20px;
+      border-left: 4px solid #2e7d32;
+      font-weight: 500;
+    }
+
+    .sign-role {
+      font-weight: 600;
+      font-size: 1em;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .sign-name {
+      font-weight: bold;
+      font-size: 1.05em;
+      margin-top: 4px;
+      line-height: 1.3;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    .sign-nip {
+      font-size: 0.82em;
+      color: #555;
+      margin-top: 0;
+      line-height: 1.2;
+      letter-spacing: 0.3px;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    /* ========== CETAK (PRINT) ========== */
+    @media print {
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .input-panel, .app-title, .action-buttons, .no-print {
+        display: none !important;
+      }
+
+      .certificate-wrapper {
+        background: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .certificate {
+        box-shadow: none;
+        margin: 0;
+        page-break-after: avoid;
+        box-sizing: border-box;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="file-protocol-banner no-print" id="fileProtocolBanner">
+    <strong>Tip:</strong> Untuk hasil terbaik, jalankan <code>JALANKAN.bat</code> lalu buka
+    <code>http://localhost:8080</code>. Buka langsung file ini juga sudah didukung.
+  </div>
+  <h2 class="app-title">🎖️ Pembuat Sertifikat Anak SD + PNG + Ruang TTD</h2>
+  <div class="main-container">
+    <div class="input-panel no-print">
+      <h3>📝 Data Peserta & Lomba</h3>
+      <div class="form-group"><label>🏫 Nama Sekolah</label><input type="text" id="schoolName" placeholder="SD Nusantara Bangsa"></div>
+      <div class="form-group"><label>👤 Nama Peserta</label><input type="text" id="studentName" placeholder="Aisyah Putri" required></div>
+      <div class="form-group"><label>📚 Kelas</label><select id="studentClass"><option value="">-- Pilih Kelas --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+      <div class="form-group"><label>🏆 Nama Lomba</label><input type="text" id="eventName" placeholder="Lomba Mewarnai Nasional"></div>
+      <div class="form-group"><label>🥇 Prestasi</label><select id="achievement"><option value="">-- Pilih Prestasi --</option><option>Juara 1</option><option>Juara 2</option><option>Juara 3</option><option>Juara Harapan 1</option><option>Juara Harapan 2</option><option>Peserta Terbaik</option><option>Peserta</option></select></div>
+      <div class="form-group"><label>📅 Tanggal</label><input type="date" id="eventDate"></div>
+      <div class="form-group"><label>📍 Tempat</label><input type="text" id="eventPlace" placeholder="Aula Kecamatan Ceria"></div>
+      <div class="form-group"><label>🖼️ Logo (opsional)</label><input type="file" id="logoUpload" accept="image/*"></div>
+      <div id="logoPositionControls" class="logo-position-controls">
+        <div class="form-group"><label>↔️ Posisi Logo Horizontal</label><input type="range" id="logoPosX" min="0" max="85" value="4.5" step="0.5"></div>
+        <div class="form-group"><label>↕️ Posisi Logo Vertikal</label><input type="range" id="logoPosY" min="0" max="85" value="4" step="0.5"></div>
+        <div class="form-group"><label>🔍 Ukuran Logo</label><input type="range" id="logoSizeSlider" min="60" max="180" value="100" step="5"></div>
+        <button type="button" id="resetLogoPos" class="secondary" style="width:100%;">↩️ Reset Posisi Logo</button>
+        <small class="template-upload-note">Klik &amp; geser logo langsung di pratinjau sertifikat.</small>
+      </div>
+
+      <div class="template-picker-section">
+        <strong style="font-size:15px;">🖼️ Template Sertifikat</strong>
+        <div class="template-grid" id="templateGrid"></div>
+        <div class="form-group">
+          <label>📤 Upload Gambar Template Sendiri</label>
+          <input type="file" id="templateUpload" accept="image/*">
+        </div>
+        <div class="form-group" id="overlayControl" style="display:none;">
+          <label>🔆 Transparansi Overlay (agar teks terbaca)</label>
+          <input type="range" id="overlaySlider" min="0" max="80" value="20" step="5">
+        </div>
+        <p class="template-upload-note">Pilih template bawaan atau upload gambar latar sendiri (JPG/PNG).</p>
+      </div>
+
+      <div class="signature-input-section">
+        <strong style="font-size:15px;">✍️ Tanda Tangan</strong>
+        <div class="form-group"><label>👤 Nama Kepala Sekolah</label><input type="text" id="kepsekNama" placeholder="Budi Santoso, S.Pd."></div>
+        <div class="form-group"><label>🆔 NIP Kepala Sekolah</label><input type="text" id="kepsekNip" placeholder="19651234 198703 1 001"></div>
+        <div class="form-group"><label>👤 Nama Guru Pembimbing</label><input type="text" id="guruNama" placeholder="Ratna Dewi, S.Pd."></div>
+        <div class="form-group"><label>🆔 NIP Guru Pembimbing</label><input type="text" id="guruNip" placeholder="19820711 200604 2 005"></div>
+      </div>
+
+      <div class="custom-fields-section">
+        <strong style="font-size:15px;">✨ Field Kustom</strong>
+        <div id="customFieldsContainer"></div>
+        <button type="button" id="addCustomField" class="secondary" style="width:100%;">+ Tambah Field</button>
+      </div>
+
+      <div class="template-custom-section">
+        <h3 style="margin:0 0 5px; font-size:18px;">🎨 Kustomisasi</h3>
+        <div class="form-group"><label>📐 Orientasi</label><select id="orientationSelect"><option value="landscape">Landscape (Lebar)</option><option value="portrait">Portrait (Tinggi)</option></select></div>
+        <div class="form-group"><label>📄 Ukuran Kertas</label><select id="paperSizeSelect"><option value="A4">A4 (210 x 297 mm)</option><option value="F4">F4 (215 x 330 mm)</option></select></div>
+        <div class="form-group">
+          <label id="textSizeLabel">🔤 Ukuran Teks Sertifikat (115%)</label>
+          <input type="range" id="textSizeSlider" min="85" max="150" value="115" step="5">
+        </div>
+        <div class="form-group"><label>↕️ Tinggi Ruang TTD</label><input type="range" id="signSpaceSlider" min="30" max="100" value="55" step="2"></div>
+        <div class="form-group">
+          <label id="signOffsetLabel">↕️ Posisi Blok TTD (0 px)</label>
+          <input type="range" id="signOffsetSlider" min="-60" max="60" value="0" step="2">
+          <small class="template-upload-note">Geser ke kiri = naik, ke kanan = turun. Bisa juga klik &amp; geser blok TTD di pratinjau.</small>
+        </div>
+        <div class="form-group"><label>Tema Cepat</label><select id="themeSelect"><option value="green">Hijau Formal</option><option value="classic">Merah Putih Klasik</option><option value="colorful">Ceria Pelangi</option><option value="modern">Modern Biru</option></select></div>
+        <div class="form-group"><label>Warna Border</label><input type="color" id="borderColor" value="#2e7d32"></div>
+        <div class="form-group"><label>Warna Outline</label><input type="color" id="outlineColor" value="#ffd700"></div>
+        <div class="form-group"><label>Warna Pita</label><input type="color" id="ribbonColor" value="#1b5e20"></div>
+        <div class="form-group"><label>Warna Judul</label><input type="color" id="titleColor" value="#004d40"></div>
+        <div class="form-group"><label>Font</label><select id="fontSelect"><option value="'Georgia', serif">Georgia</option><option value="'Comic Sans MS', cursive">Comic Sans</option><option value="'Segoe UI', sans-serif">Segoe UI</option><option value="'Times New Roman', serif">Times New Roman</option></select></div>
+      </div>
+
+      <div class="action-buttons">
+        <button id="printBtn">🖨️ Cetak / PDF</button>
+        <button id="downloadPngBtn" class="secondary">📥 Download PNG</button>
+      </div>
+      <small style="color:gray; text-align:center;">Ruang kosong di atas garis tanda tangan siap untuk ditandatangani.</small>
+    </div>
+
+    <div class="certificate-wrapper" id="certificateWrapper">
+      <div class="preview-size-label" id="previewSizeLabel">Pratinjau: A4 Landscape</div>
+      <div class="certificate-scale-wrap" id="certificateScaleWrap">
+      <div class="certificate A4 landscape" id="certificate">
+        <div class="cert-bg-layer" id="certBgLayer"></div>
+        <div class="cert-bg-overlay" id="certBgOverlay"></div>
+        <div class="logo-container" id="logoContainer">
+          <img id="logoImg" src="" alt="logo" style="display:none;">
+          <span class="garuda-text" id="logoFallback">GARUDA PANCASILA</span>
+        </div>
+        <div class="cert-content">
+
+        <div class="cert-header">
+          <div class="ribbon" id="ribbonElement">SERTIFIKAT</div>
+          <div class="cert-title" id="titleElement">PENGHARGAAN</div>
+        </div>
+
+        <div class="cert-body">
+          <div class="cert-subtitle">Diberikan kepada:</div>
+          <div class="recipient-name" id="displayName">Nama Peserta</div>
+          <div class="detail-text" id="displayDetailLine1"></div>
+          <div class="detail-text" id="displayDetailLine2"></div>
+          <div class="custom-fields-display" id="displayCustomFields"></div>
+        </div>
+
+        <div class="signature-area" id="signatureArea">
+          <div class="signature">
+            <span class="sign-role">Kepala Sekolah</span>
+            <div class="sign-space" id="kepsekSignSpace"></div>
+            <span class="sign-name" id="kepsekDisplayNama">Budi Santoso, S.Pd.</span>
+            <div class="sign-line"></div>
+            <span class="sign-nip" id="kepsekDisplayNip">NIP. 19651234 198703 1 001</span>
+          </div>
+          <div class="signature">
+            <span class="sign-role">Guru Pembimbing</span>
+            <div class="sign-space" id="guruSignSpace"></div>
+            <span class="sign-name" id="guruDisplayNama">Ratna Dewi, S.Pd.</span>
+            <div class="sign-line"></div>
+            <span class="sign-nip" id="guruDisplayNip">NIP. 19820711 200604 2 005</span>
+          </div>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const schoolInput = document.getElementById('schoolName');
+      const nameInput = document.getElementById('studentName');
+      const classSelect = document.getElementById('studentClass');
+      const eventInput = document.getElementById('eventName');
+      const achievementSelect = document.getElementById('achievement');
+      const dateInput = document.getElementById('eventDate');
+      const placeInput = document.getElementById('eventPlace');
+      const logoUpload = document.getElementById('logoUpload');
+      const logoImg = document.getElementById('logoImg');
+      const logoFallback = document.getElementById('logoFallback');
+      const logoContainer = document.getElementById('logoContainer');
+      const logoPosX = document.getElementById('logoPosX');
+      const logoPosY = document.getElementById('logoPosY');
+      const logoSizeSlider = document.getElementById('logoSizeSlider');
+      const resetLogoPosBtn = document.getElementById('resetLogoPos');
+
+      let logoPosition = { x: 4.5, y: 4 };
+      let logoScale = 100;
+      let isDraggingLogo = false;
+
+      const displayName = document.getElementById('displayName');
+      const displayDetailLine1 = document.getElementById('displayDetailLine1');
+      const displayDetailLine2 = document.getElementById('displayDetailLine2');
+      const displayCustomFields = document.getElementById('displayCustomFields');
+      const customFieldsContainer = document.getElementById('customFieldsContainer');
+
+      const kepsekNamaInput = document.getElementById('kepsekNama');
+      const kepsekNipInput = document.getElementById('kepsekNip');
+      const guruNamaInput = document.getElementById('guruNama');
+      const guruNipInput = document.getElementById('guruNip');
+      const kepsekDisplayNama = document.getElementById('kepsekDisplayNama');
+      const kepsekDisplayNip = document.getElementById('kepsekDisplayNip');
+      const guruDisplayNama = document.getElementById('guruDisplayNama');
+      const guruDisplayNip = document.getElementById('guruDisplayNip');
+
+      const certificateDiv = document.getElementById('certificate');
+      const certificateScaleWrap = document.getElementById('certificateScaleWrap');
+      const certificateWrapper = document.getElementById('certificateWrapper');
+      const previewSizeLabel = document.getElementById('previewSizeLabel');
+      const ribbonDiv = document.getElementById('ribbonElement');
+      const titleDiv = document.getElementById('titleElement');
+      const themeSelect = document.getElementById('themeSelect');
+      const borderColorInput = document.getElementById('borderColor');
+      const outlineColorInput = document.getElementById('outlineColor');
+      const ribbonColorInput = document.getElementById('ribbonColor');
+      const titleColorInput = document.getElementById('titleColor');
+      const fontSelect = document.getElementById('fontSelect');
+      const orientationSelect = document.getElementById('orientationSelect');
+      const paperSizeSelect = document.getElementById('paperSizeSelect');
+      const signSpaceSlider = document.getElementById('signSpaceSlider');
+      const signOffsetSlider = document.getElementById('signOffsetSlider');
+      const signOffsetLabel = document.getElementById('signOffsetLabel');
+      const signatureArea = document.getElementById('signatureArea');
+      const textSizeSlider = document.getElementById('textSizeSlider');
+      const textSizeLabel = document.getElementById('textSizeLabel');
+      const kepsekSignSpace = document.getElementById('kepsekSignSpace');
+      const guruSignSpace = document.getElementById('guruSignSpace');
+      const templateGrid = document.getElementById('templateGrid');
+      const templateUpload = document.getElementById('templateUpload');
+      const certBgLayer = document.getElementById('certBgLayer');
+      const certBgOverlay = document.getElementById('certBgOverlay');
+      const overlayControl = document.getElementById('overlayControl');
+      const overlaySlider = document.getElementById('overlaySlider');
+
+      let customFields = [];
+      let currentOrientation = 'landscape';
+      let currentPaperSize = 'A4';
+      let currentTemplateId = 'plain';
+      let customTemplateImage = '';
+
+      const PAPER_SIZES = {
+        A4: { w: 210, h: 297, label: 'A4 (210 × 297 mm)' },
+        F4: { w: 215, h: 330, label: 'F4 (215 × 330 mm)' }
+      };
+
+      function getPageDimensionsMm() {
+        const paper = PAPER_SIZES[currentPaperSize] || PAPER_SIZES.A4;
+        if (currentOrientation === 'landscape') {
+          return { w: paper.h, h: paper.w, label: paper.label };
+        }
+        return { w: paper.w, h: paper.h, label: paper.label };
+      }
+
+      function getBgDimensions() {
+        const page = getPageDimensionsMm();
+        const base = 1000;
+        if (page.w >= page.h) {
+          return { w: base, h: Math.round(base * (page.h / page.w)) };
+        }
+        return { w: Math.round(base * (page.w / page.h)), h: base };
+      }
+
+      function svgToDataUri(svg) {
+        return "url('data:image/svg+xml," + encodeURIComponent(svg) + "')";
+      }
+
+      function buildGreenOrnate(w, h) {
+        const m = Math.round(Math.min(w, h) * 0.02);
+        const sw = Math.max(3, Math.round(w * 0.0075));
+        const iw = Math.max(2, Math.round(w * 0.00375));
+        const r = Math.round(Math.min(w, h) * 0.028);
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f1f8e9"/><stop offset="100%" stop-color="#ffffff"/></linearGradient></defs><rect width="' + w + '" height="' + h + '" fill="url(#g)"/><rect x="' + m + '" y="' + m + '" width="' + (w - 2 * m) + '" height="' + (h - 2 * m) + '" fill="none" stroke="#2e7d32" stroke-width="' + sw + '"/><rect x="' + (m + 10) + '" y="' + (m + 10) + '" width="' + (w - 2 * m - 20) + '" height="' + (h - 2 * m - 20) + '" fill="none" stroke="#ffd700" stroke-width="' + iw + '"/><circle cx="' + (m + 32) + '" cy="' + (m + 32) + '" r="' + r + '" fill="#2e7d32" opacity="0.15"/><circle cx="' + (w - m - 32) + '" cy="' + (m + 32) + '" r="' + r + '" fill="#2e7d32" opacity="0.15"/><circle cx="' + (m + 32) + '" cy="' + (h - m - 32) + '" r="' + r + '" fill="#2e7d32" opacity="0.15"/><circle cx="' + (w - m - 32) + '" cy="' + (h - m - 32) + '" r="' + r + '" fill="#2e7d32" opacity="0.15"/><text x="' + (w / 2) + '" y="' + (m + 28) + '" text-anchor="middle" font-size="' + Math.round(h * 0.028) + '" fill="#2e7d32" opacity="0.25" font-family="serif">✦ ✦ ✦ ✦ ✦</text></svg>';
+      }
+
+      function buildGoldClassic(w, h) {
+        const m = Math.round(Math.min(w, h) * 0.018);
+        const sw = Math.max(4, Math.round(w * 0.008));
+        const iw = Math.max(2, Math.round(w * 0.0025));
+        const corner = Math.round(Math.min(w, h) * 0.05);
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none"><rect width="' + w + '" height="' + h + '" fill="#fffaf0"/><rect x="' + m + '" y="' + m + '" width="' + (w - 2 * m) + '" height="' + (h - 2 * m) + '" fill="none" stroke="#b8860b" stroke-width="' + sw + '"/><rect x="' + (m + 10) + '" y="' + (m + 10) + '" width="' + (w - 2 * m - 20) + '" height="' + (h - 2 * m - 20) + '" fill="none" stroke="#ffd700" stroke-width="' + iw + '"/><path d="M' + (m + 26) + ' ' + (m + 26) + ' L' + (m + 26 + corner) + ' ' + (m + 26) + ' L' + (m + 26) + ' ' + (m + 26 + corner) + ' Z" fill="#ffd700" opacity="0.5"/><path d="M' + (w - m - 26) + ' ' + (m + 26) + ' L' + (w - m - 26 - corner) + ' ' + (m + 26) + ' L' + (w - m - 26) + ' ' + (m + 26 + corner) + ' Z" fill="#ffd700" opacity="0.5"/><path d="M' + (m + 26) + ' ' + (h - m - 26) + ' L' + (m + 26 + corner) + ' ' + (h - m - 26) + ' L' + (m + 26) + ' ' + (h - m - 26 - corner) + ' Z" fill="#ffd700" opacity="0.5"/><path d="M' + (w - m - 26) + ' ' + (h - m - 26) + ' L' + (w - m - 26 - corner) + ' ' + (h - m - 26) + ' L' + (w - m - 26) + ' ' + (h - m - 26 - corner) + ' Z" fill="#ffd700" opacity="0.5"/></svg>';
+      }
+
+      function buildRedWhite(w, h) {
+        const m = Math.round(Math.min(w, h) * 0.02);
+        const band = Math.round(h * 0.12);
+        const sw = Math.max(3, Math.round(w * 0.006));
+        const iw = Math.max(2, Math.round(w * 0.0025));
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none"><rect width="' + w + '" height="' + h + '" fill="#ffffff"/><rect x="0" y="0" width="' + w + '" height="' + band + '" fill="#ce1126" opacity="0.08"/><rect x="0" y="' + (h - band) + '" width="' + w + '" height="' + band + '" fill="#ce1126" opacity="0.08"/><rect x="' + m + '" y="' + m + '" width="' + (w - 2 * m) + '" height="' + (h - 2 * m) + '" fill="none" stroke="#ce1126" stroke-width="' + sw + '"/><rect x="' + (m + 10) + '" y="' + (m + 10) + '" width="' + (w - 2 * m - 20) + '" height="' + (h - 2 * m - 20) + '" fill="none" stroke="#ffd700" stroke-width="' + iw + '"/><circle cx="' + (w / 2) + '" cy="' + (h / 2) + '" r="' + Math.round(Math.min(w, h) * 0.08) + '" fill="#ce1126" opacity="0.04"/></svg>';
+      }
+
+      function buildBlueModern(w, h) {
+        const m = Math.round(Math.min(w, h) * 0.02);
+        const sw = Math.max(3, Math.round(w * 0.006));
+        const iw = Math.max(2, Math.round(w * 0.0025));
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none"><defs><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e3f2fd"/><stop offset="100%" stop-color="#ffffff"/></linearGradient></defs><rect width="' + w + '" height="' + h + '" fill="url(#b)"/><rect x="' + m + '" y="' + m + '" width="' + (w - 2 * m) + '" height="' + (h - 2 * m) + '" fill="none" stroke="#1565c0" stroke-width="' + sw + '"/><rect x="' + (m + 10) + '" y="' + (m + 10) + '" width="' + (w - 2 * m - 20) + '" height="' + (h - 2 * m - 20) + '" fill="none" stroke="#ffab00" stroke-width="' + iw + '"/><circle cx="' + Math.round(w * 0.15) + '" cy="' + Math.round(h * 0.2) + '" r="' + Math.round(Math.min(w, h) * 0.06) + '" fill="#1565c0" opacity="0.06"/><circle cx="' + Math.round(w * 0.85) + '" cy="' + Math.round(h * 0.78) + '" r="' + Math.round(Math.min(w, h) * 0.08) + '" fill="#1565c0" opacity="0.05"/></svg>';
+      }
+
+      function buildKidsFun(w, h) {
+        const m = Math.round(Math.min(w, h) * 0.018);
+        const sw = Math.max(3, Math.round(w * 0.006));
+        const iw = Math.max(2, Math.round(w * 0.0025));
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none"><rect width="' + w + '" height="' + h + '" fill="#fffde7"/><rect x="' + m + '" y="' + m + '" width="' + (w - 2 * m) + '" height="' + (h - 2 * m) + '" fill="none" stroke="#e91e63" stroke-width="' + sw + '" rx="8"/><rect x="' + (m + 10) + '" y="' + (m + 10) + '" width="' + (w - 2 * m - 20) + '" height="' + (h - 2 * m - 20) + '" fill="none" stroke="#00bcd4" stroke-width="' + iw + '" rx="6"/><circle cx="' + Math.round(w * 0.1) + '" cy="' + Math.round(h * 0.12) + '" r="12" fill="#ff9800" opacity="0.5"/><circle cx="' + Math.round(w * 0.9) + '" cy="' + Math.round(h * 0.16) + '" r="10" fill="#e91e63" opacity="0.5"/><circle cx="' + Math.round(w * 0.12) + '" cy="' + Math.round(h * 0.86) + '" r="14" fill="#4caf50" opacity="0.4"/><circle cx="' + Math.round(w * 0.88) + '" cy="' + Math.round(h * 0.84) + '" r="11" fill="#2196f3" opacity="0.4"/><text x="' + Math.round(w * 0.18) + '" y="' + Math.round(h * 0.18) + '" font-size="20" fill="#ff9800" opacity="0.4">★</text><text x="' + Math.round(w * 0.82) + '" y="' + Math.round(h * 0.2) + '" font-size="18" fill="#e91e63" opacity="0.4">★</text></svg>';
+      }
+
+      function buildFloralSoft(w, h) {
+        const m = Math.round(Math.min(w, h) * 0.02);
+        const sw = Math.max(3, Math.round(w * 0.005));
+        const iw = Math.max(2, Math.round(w * 0.0025));
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none"><rect width="' + w + '" height="' + h + '" fill="#fff8fb"/><rect x="' + m + '" y="' + m + '" width="' + (w - 2 * m) + '" height="' + (h - 2 * m) + '" fill="none" stroke="#ad1457" stroke-width="' + sw + '"/><rect x="' + (m + 10) + '" y="' + (m + 10) + '" width="' + (w - 2 * m - 20) + '" height="' + (h - 2 * m - 20) + '" fill="none" stroke="#f48fb1" stroke-width="' + iw + '"/><circle cx="' + Math.round(w * 0.08) + '" cy="' + Math.round(h * 0.1) + '" r="18" fill="#f48fb1" opacity="0.25"/><circle cx="' + Math.round(w * 0.92) + '" cy="' + Math.round(h * 0.9) + '" r="20" fill="#f48fb1" opacity="0.2"/><circle cx="' + Math.round(w * 0.92) + '" cy="' + Math.round(h * 0.1) + '" r="14" fill="#ce93d8" opacity="0.2"/><circle cx="' + Math.round(w * 0.08) + '" cy="' + Math.round(h * 0.9) + '" r="16" fill="#ce93d8" opacity="0.2"/></svg>';
+      }
+
+      const TEMPLATE_BUILDERS = {
+        'green-ornate': buildGreenOrnate,
+        'gold-classic': buildGoldClassic,
+        'red-white': buildRedWhite,
+        'blue-modern': buildBlueModern,
+        'kids-fun': buildKidsFun,
+        'floral-soft': buildFloralSoft
+      };
+
+      const CERT_TEMPLATES = [
+        { id: 'plain', name: 'Polos Putih', hasBg: false, theme: 'green', thumb: 'linear-gradient(135deg, #ffffff 60%, #e8f5e9 100%)' },
+        { id: 'green-ornate', name: 'Hijau Ornamen', hasBg: true, theme: 'green', thumb: 'linear-gradient(135deg, #e8f5e9, #c8e6c9)' },
+        { id: 'gold-classic', name: 'Emas Klasik', hasBg: true, theme: 'classic', thumb: 'linear-gradient(135deg, #fff8e1, #ffe082)' },
+        { id: 'red-white', name: 'Merah Putih', hasBg: true, theme: 'classic', thumb: 'linear-gradient(135deg, #ffebee, #ffffff)' },
+        { id: 'blue-modern', name: 'Biru Modern', hasBg: true, theme: 'modern', thumb: 'linear-gradient(135deg, #e3f2fd, #bbdefb)' },
+        { id: 'kids-fun', name: 'Ceria Anak', hasBg: true, theme: 'colorful', thumb: 'linear-gradient(135deg, #fff9c4, #f8bbd0, #b3e5fc)' },
+        { id: 'floral-soft', name: 'Floral Lembut', hasBg: true, theme: 'green', thumb: 'linear-gradient(135deg, #fce4ec, #f3e5f5)' }
+      ];
+
+      function getTemplateBgImage(templateId, customW, customH) {
+        const builder = TEMPLATE_BUILDERS[templateId];
+        if (!builder) return '';
+        const dims = customW && customH ? { w: customW, h: customH } : getBgDimensions();
+        return svgToDataUri(builder(dims.w, dims.h));
+      }
+
+      function refreshTemplateBackground() {
+        certBgLayer.classList.remove('bg-cover');
+        if (currentTemplateId === 'custom' && customTemplateImage) {
+          certBgLayer.classList.add('bg-cover');
+          certBgLayer.style.backgroundImage = "url('" + customTemplateImage + "')";
+          return;
+        }
+        const tpl = CERT_TEMPLATES.find(function(t) { return t.id === currentTemplateId; });
+        if (tpl && tpl.hasBg) {
+          certBgLayer.style.backgroundImage = getTemplateBgImage(tpl.id);
+        } else {
+          certBgLayer.style.backgroundImage = '';
+        }
+      }
+
+      function renderTemplateGrid() {
+        if (!templateGrid) return;
+
+        const page = getPageDimensionsMm();
+        const thumbDims = getBgDimensions();
+        const thumbW = 160;
+        const thumbH = Math.round(160 * (thumbDims.h / thumbDims.w));
+
+        templateGrid.innerHTML = '';
+        CERT_TEMPLATES.forEach(function(tpl) {
+          const card = document.createElement('div');
+          card.className = 'template-card' + (tpl.id === currentTemplateId ? ' active' : '');
+          card.dataset.id = tpl.id;
+          card.title = tpl.name;
+
+          const thumb = document.createElement('div');
+          thumb.className = 'template-thumb';
+          thumb.style.aspectRatio = page.w + ' / ' + page.h;
+          if (tpl.hasBg && TEMPLATE_BUILDERS[tpl.id]) {
+            thumb.style.backgroundImage = getTemplateBgImage(tpl.id, thumbW, thumbH);
+            thumb.style.backgroundColor = '#ffffff';
+          } else {
+            thumb.style.background = tpl.thumb;
+          }
+
+          const label = document.createElement('span');
+          label.textContent = tpl.name;
+
+          card.appendChild(thumb);
+          card.appendChild(label);
+          card.addEventListener('click', function() {
+            applyCertTemplate(tpl.id);
+            templateUpload.value = '';
+            customTemplateImage = '';
+          });
+          templateGrid.appendChild(card);
+        });
+      }
+
+      function setOverlayOpacity(percent) {
+        certBgOverlay.style.background = 'rgba(255,255,255,' + (percent / 100) + ')';
+      }
+
+      function applyCertTemplate(templateId) {
+        const tpl = CERT_TEMPLATES.find(function(t) { return t.id === templateId; }) || CERT_TEMPLATES[0];
+        currentTemplateId = tpl.id;
+
+        document.querySelectorAll('.template-card').forEach(function(card) {
+          card.classList.toggle('active', card.dataset.id === templateId);
+        });
+
+        if (tpl.hasBg) {
+          certificateDiv.classList.add('has-bg-template');
+          refreshTemplateBackground();
+          overlayControl.style.display = 'flex';
+          setOverlayOpacity(parseInt(overlaySlider.value, 10));
+        } else {
+          certificateDiv.classList.remove('has-bg-template');
+          certBgLayer.style.backgroundImage = '';
+          overlayControl.style.display = 'none';
+          certBgOverlay.style.background = 'rgba(255,255,255,0)';
+        }
+
+        if (tpl.theme) setTheme(tpl.theme);
+        applyTemplateStyle();
+        applyPreviewDimensions();
+      }
+
+      function applyCustomTemplateImage(dataUrl) {
+        currentTemplateId = 'custom';
+        customTemplateImage = dataUrl;
+        document.querySelectorAll('.template-card').forEach(function(card) {
+          card.classList.remove('active');
+        });
+        certificateDiv.classList.add('has-bg-template');
+        certBgLayer.classList.add('bg-cover');
+        certBgLayer.style.backgroundImage = "url('" + dataUrl + "')";
+        overlayControl.style.display = 'flex';
+        setOverlayOpacity(parseInt(overlaySlider.value, 10));
+        applyPreviewDimensions();
+      }
+
+      function applyPreviewDimensions() {
+        const page = getPageDimensionsMm();
+        const ratio = page.w / page.h;
+        const wrapEl = certificateScaleWrap || certificateWrapper;
+        const wrapperW = Math.max(220, wrapEl.clientWidth - 16);
+        const maxH = Math.max(260, Math.min(window.innerHeight * 0.72, 820));
+
+        let certW = wrapperW;
+        let certH = certW / ratio;
+
+        if (certH > maxH) {
+          certH = maxH;
+          certW = certH * ratio;
+        }
+
+        certW = Math.round(certW);
+        certH = Math.round(certH);
+
+        certificateDiv.style.setProperty('--cert-preview-w', certW + 'px');
+        certificateDiv.style.setProperty('--cert-preview-h', certH + 'px');
+        certificateDiv.style.width = certW + 'px';
+        certificateDiv.style.height = certH + 'px';
+        certificateDiv.style.transform = '';
+        certificateScaleWrap.style.minHeight = certH + 'px';
+        certificateScaleWrap.style.height = 'auto';
+        certificateScaleWrap.style.width = '100%';
+
+        applyPaperLayoutVars();
+        applySignAreaOffset();
+        fitContentLayout();
+
+        const orientLabel = currentOrientation === 'landscape' ? 'Landscape' : 'Portrait';
+        if (previewSizeLabel) {
+          previewSizeLabel.textContent = 'Pratinjau: ' + currentPaperSize + ' ' + orientLabel + ' — ' + page.w + ' × ' + page.h + ' mm (proporsi ' + (Math.round(ratio * 100) / 100) + ':1)';
+        }
+      }
+
+      function applyPaperLayoutVars() {
+        const hasTemplate = certificateDiv.classList.contains('has-bg-template');
+        const portrait = currentOrientation === 'portrait';
+        const f4 = currentPaperSize === 'F4';
+
+        let padTop = hasTemplate ? 5 : 4.5;
+        let padX = hasTemplate ? 8 : 7;
+        let padBottom = hasTemplate ? 10 : 8.5;
+        let sectionGap = 0.35;
+        let titleScale = portrait ? '2.35em' : '2.75em';
+        let nameScale = portrait ? '2.15em' : '2.55em';
+        let ribbonScale = portrait ? '1.25em' : '1.4em';
+        let detailLh = '1.6';
+
+        if (portrait) {
+          padTop += 0.5;
+          padBottom += 1;
+          sectionGap = 0.25;
+        }
+        if (f4 && portrait) {
+          padTop += 0.5;
+          padBottom += 1.5;
+          titleScale = '2.05em';
+          nameScale = '1.95em';
+          ribbonScale = '1.15em';
+          detailLh = '1.42';
+          sectionGap = 0.15;
+        } else if (f4) {
+          padBottom += 0.5;
+        }
+
+        certificateDiv.style.setProperty('--cert-pad-top', padTop + '%');
+        certificateDiv.style.setProperty('--cert-pad-x', padX + '%');
+        certificateDiv.style.setProperty('--cert-pad-bottom', padBottom + '%');
+        certificateDiv.style.setProperty('--cert-section-gap', sectionGap + 'em');
+        certificateDiv.style.setProperty('--cert-title-scale', titleScale);
+        certificateDiv.style.setProperty('--cert-name-scale', nameScale);
+        certificateDiv.style.setProperty('--cert-ribbon-scale', ribbonScale);
+        certificateDiv.style.setProperty('--cert-detail-lh', detailLh);
+        certificateDiv.style.setProperty('--cert-block-scale', '1');
+      }
+
+      function measureContentOverflow() {
+        const certContent = certificateDiv.querySelector('.cert-content');
+        const certHeader = certContent && certContent.querySelector('.cert-header');
+        const certBody = certContent && certContent.querySelector('.cert-body');
+        if (!certContent) return 0;
+
+        const contentRect = certContent.getBoundingClientRect();
+        let overflow = certContent.scrollHeight - certContent.clientHeight;
+
+        if (certBody) {
+          overflow = Math.max(overflow, certBody.scrollHeight - certBody.clientHeight);
+        }
+
+        [certHeader, certBody, signatureArea].forEach(function(el) {
+          if (!el) return;
+          const rect = el.getBoundingClientRect();
+          overflow = Math.max(overflow, rect.bottom - contentRect.bottom);
+        });
+
+        if (certHeader && certBody) {
+          const headerBodyGap = certBody.getBoundingClientRect().top - certHeader.getBoundingClientRect().bottom;
+          if (headerBodyGap < 0) overflow = Math.max(overflow, -headerBodyGap);
+        }
+
+        if (certBody && signatureArea) {
+          const bodySigGap = signatureArea.getBoundingClientRect().top - certBody.getBoundingClientRect().bottom;
+          if (bodySigGap < 0) overflow = Math.max(overflow, -bodySigGap);
+        }
+
+        return overflow;
+      }
+
+      function getSignOffsetPx() {
+        return parseInt(signOffsetSlider.value, 10) || 0;
+      }
+
+      function updateSignOffsetLabel() {
+        if (!signOffsetLabel) return;
+        const px = getSignOffsetPx();
+        let hint = '0 px';
+        if (px > 0) hint = 'turun ' + px + ' px';
+        else if (px < 0) hint = 'naik ' + Math.abs(px) + ' px';
+        signOffsetLabel.textContent = '↕️ Posisi Blok TTD (' + hint + ')';
+      }
+
+      function applySignAreaOffset() {
+        const px = getSignOffsetPx();
+        certificateDiv.style.setProperty('--sign-offset-y', px + 'px');
+        updateSignOffsetLabel();
+      }
+
+      function getSignOffsetMm() {
+        const px = getSignOffsetPx();
+        const certH = certificateDiv.offsetHeight || 530;
+        const page = getPageDimensionsMm();
+        return ((px / certH) * page.h).toFixed(2);
+      }
+
+      function getTextSizeScale() {
+        return parseInt(textSizeSlider.value, 10) / 100;
+      }
+
+      function updateTextSizeLabel() {
+        if (textSizeLabel && textSizeSlider) {
+          textSizeLabel.textContent = '🔤 Ukuran Teks Sertifikat (' + textSizeSlider.value + '%)';
+        }
+      }
+
+      function scaledPrintPx(basePx) {
+        return Math.round(basePx * getTextSizeScale()) + 'px';
+      }
+
+      function computeBaseFontSize(certW, certH) {
+        const shortSide = Math.min(certW, certH);
+        const longSide = Math.max(certW, certH);
+        let size = shortSide * 0.022;
+
+        if (currentOrientation === 'portrait') {
+          size = shortSide * 0.019;
+          if (currentPaperSize === 'F4') size *= 0.92;
+        }
+
+        if (longSide / shortSide > 1.35) {
+          size = Math.min(size, certH * 0.034);
+        }
+
+        size *= getTextSizeScale();
+        return Math.max(8, Math.min(22, size));
+      }
+
+      function getMaxSignSpace(certH) {
+        const portrait = currentOrientation === 'portrait';
+        const f4 = currentPaperSize === 'F4';
+        let ratio = portrait ? 0.065 : 0.09;
+        if (f4 && portrait) ratio = 0.055;
+        return Math.max(22, Math.round(certH * ratio));
+      }
+
+      function setSignSpaceHeight(px, certH) {
+        const h = certH || certificateDiv.offsetHeight || 530;
+        const maxAllowed = getMaxSignSpace(h);
+        const minAllowed = currentOrientation === 'portrait' ? 22 : 24;
+        const target = Math.min(px, maxAllowed);
+        kepsekSignSpace.style.minHeight = Math.max(minAllowed, target) + 'px';
+        guruSignSpace.style.minHeight = Math.max(minAllowed, target) + 'px';
+        kepsekSignSpace.style.maxHeight = maxAllowed + 'px';
+        guruSignSpace.style.maxHeight = maxAllowed + 'px';
+        return Math.max(minAllowed, target);
+      }
+
+      function fitContentLayout() {
+        const certContent = certificateDiv.querySelector('.cert-content');
+        const certW = certificateDiv.offsetWidth;
+        const certH = certificateDiv.offsetHeight;
+        if (!certContent || !certW || !certH) return;
+
+        const sliderVal = parseInt(signSpaceSlider.value, 10);
+        const preferredFont = computeBaseFontSize(certW, certH);
+        let fontSize = preferredFont;
+        let blockScale = 1;
+        const minFont = Math.max(7, preferredFont * 0.68);
+        const minBlockScale = 0.7;
+        const minSign = currentOrientation === 'portrait' ? 20 : 22;
+        let signH = setSignSpaceHeight(sliderVal, certH);
+
+        for (let pass = 0; pass < 48; pass++) {
+          certificateDiv.style.setProperty('--cert-font-size', fontSize.toFixed(2) + 'px');
+          certificateDiv.style.setProperty('--cert-block-scale', blockScale.toFixed(3));
+          signH = setSignSpaceHeight(signH, certH);
+
+          const overflow = measureContentOverflow();
+          const hOverflow = certContent.scrollWidth - certContent.clientWidth;
+
+          if (overflow <= 2 && hOverflow <= 2) break;
+
+          if (overflow > 2 && signH > minSign) {
+            signH = Math.max(minSign, signH - Math.max(2, Math.ceil(overflow * 0.45)));
+            continue;
+          }
+
+          if (overflow > 2 && blockScale > minBlockScale) {
+            blockScale = Math.max(minBlockScale, blockScale - 0.025);
+            continue;
+          }
+
+          if (overflow > 2 || hOverflow > 2) {
+            fontSize = Math.max(minFont, fontSize - 0.3);
+            continue;
+          }
+        }
+      }
+
+      function updateCertificateClasses() {
+        certificateDiv.classList.remove('A4', 'F4', 'landscape', 'portrait');
+        certificateDiv.classList.add(currentPaperSize, currentOrientation);
+        refreshTemplateBackground();
+        renderTemplateGrid();
+        applyPreviewDimensions();
+      }
+
+      function scaleCertificatePreview() {
+        clearTimeout(scaleCertificatePreview._timer);
+        scaleCertificatePreview._timer = setTimeout(applyPreviewDimensions, 40);
+      }
+
+      window.addEventListener('resize', scaleCertificatePreview);
+
+      if (window.ResizeObserver) {
+        const previewObserver = new ResizeObserver(function() {
+          scaleCertificatePreview();
+        });
+        previewObserver.observe(certificateWrapper);
+      }
+
+      function updatePrintSettings() {
+        let styleId = 'print-dynamic-style';
+        let styleEl = document.getElementById(styleId);
+        if (!styleEl) {
+          styleEl = document.createElement('style');
+          styleEl.id = styleId;
+          document.head.appendChild(styleEl);
+        }
+
+        let paperW, paperH;
+        if (currentPaperSize === 'A4') {
+          paperW = 210; paperH = 297;
+        } else {
+          paperW = 215; paperH = 330;
+        }
+
+        let pageWidth, pageHeight;
+        if (currentOrientation === 'landscape') {
+          pageWidth = paperH; pageHeight = paperW;
+        } else {
+          pageWidth = paperW; pageHeight = paperH;
+        }
+
+        const borderMM = 3;
+        const outlineMM = 3;
+        const outlineOffsetMM = 1.5;
+        const padTop = 14;
+        const padRight = 18;
+        const padBottom = (currentPaperSize === 'F4' && currentOrientation === 'portrait') ? 16 : 14;
+        const basePrintFont = (currentPaperSize === 'F4' && currentOrientation === 'portrait') ? 14 : 16;
+        const printFont = scaledPrintPx(basePrintFont);
+        const signSpaceMm = (currentOrientation === 'portrait') ? 14 : 18;
+        const padLeft = 18;
+
+        styleEl.textContent = `
+          @media print {
+            @page {
+              size: ${pageWidth}mm ${pageHeight}mm;
+              margin: 0;
+            }
+            .certificate {
+              width: ${pageWidth}mm;
+              height: ${pageHeight}mm;
+              min-height: ${pageHeight}mm;
+              max-width: none;
+              aspect-ratio: unset;
+              border-width: ${borderMM}mm;
+              outline-width: ${outlineMM}mm;
+              outline-offset: ${outlineOffsetMM}mm;
+              padding: 0;
+              font-size: ${printFont};
+              display: flex;
+              flex-direction: column;
+            }
+            .cert-content {
+              padding: ${padTop}mm ${padRight}mm ${padBottom}mm ${padLeft}mm;
+              min-height: 100%;
+            }
+            .certificate.has-bg-template {
+              border: none;
+              outline: none;
+            }
+            .certificate .cert-title { font-size: ${scaledPrintPx(30)}; }
+            .certificate .ribbon { font-size: ${scaledPrintPx(18)}; padding: 6px 32px; }
+            .certificate .recipient-name { font-size: ${scaledPrintPx(32)}; }
+            .certificate .detail-text { font-size: ${scaledPrintPx(15)}; line-height: 1.7; }
+            .certificate .signature-area {
+              font-size: ${scaledPrintPx(13)};
+              padding-top: 8mm;
+              transform: translateY(${getSignOffsetMm()}mm);
+            }
+            .certificate .sign-space { min-height: ${signSpaceMm}mm; width: 55mm; }
+            .cert-bg-layer, .cert-bg-overlay {
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+          }
+        `;
+      }
+
+      function setOrientation(orientation) {
+        currentOrientation = orientation;
+        updateCertificateClasses();
+        updatePrintSettings();
+      }
+
+      function setPaperSize(size) {
+        currentPaperSize = size;
+        updateCertificateClasses();
+        updatePrintSettings();
+      }
+
+      orientationSelect.addEventListener('change', e => setOrientation(e.target.value));
+      paperSizeSelect.addEventListener('change', e => setPaperSize(e.target.value));
+
+      signSpaceSlider.addEventListener('input', function() {
+        fitContentLayout();
+      });
+
+      if (signOffsetSlider) {
+        signOffsetSlider.addEventListener('input', function() {
+          applySignAreaOffset();
+          updatePrintSettings();
+          fitContentLayout();
+        });
+      }
+
+      (function initSignatureDrag() {
+        if (!signatureArea || !certificateDiv) return;
+
+        let dragging = false;
+        let startY = 0;
+        let startOffset = 0;
+
+        function onPointerDown(e) {
+          if (e.button !== undefined && e.button !== 0) return;
+          dragging = true;
+          startY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
+          startOffset = getSignOffsetPx();
+          signatureArea.classList.add('dragging');
+          e.preventDefault();
+        }
+
+        function onPointerMove(e) {
+          if (!dragging) return;
+          const clientY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
+          const delta = clientY - startY;
+          const next = Math.max(-60, Math.min(60, startOffset + Math.round(delta / 2) * 2));
+          signOffsetSlider.value = String(next);
+          applySignAreaOffset();
+          fitContentLayout();
+          e.preventDefault();
+        }
+
+        function onPointerUp() {
+          if (!dragging) return;
+          dragging = false;
+          signatureArea.classList.remove('dragging');
+          updatePrintSettings();
+        }
+
+        signatureArea.addEventListener('mousedown', onPointerDown);
+        signatureArea.addEventListener('touchstart', onPointerDown, { passive: false });
+        document.addEventListener('mousemove', onPointerMove);
+        document.addEventListener('touchmove', onPointerMove, { passive: false });
+        document.addEventListener('mouseup', onPointerUp);
+        document.addEventListener('touchend', onPointerUp);
+        document.addEventListener('touchcancel', onPointerUp);
+      })();
+
+      if (textSizeSlider) {
+        textSizeSlider.addEventListener('input', function() {
+          updateTextSizeLabel();
+          updatePrintSettings();
+          fitContentLayout();
+        });
+      }
+
+      function updateCertificateData() {
+        displayName.textContent = nameInput.value.trim() || 'Nama Peserta';
+
+        const school = schoolInput.value.trim();
+        const kelas = classSelect.value;
+        const achievement = achievementSelect.value;
+        const event = eventInput.value.trim();
+
+        let line1Parts = [];
+        if (school || kelas) {
+          let schoolPart = '';
+          if (school) schoolPart = 'dari ' + school;
+          if (kelas) schoolPart += (school ? ' Kelas ' : 'Kelas ') + kelas;
+          line1Parts.push(schoolPart + '.');
+        }
+
+        if (achievement && event) {
+          line1Parts.push(`Atas prestasi sebagai ${achievement} dalam ${event}.`);
+        } else if (achievement) {
+          line1Parts.push(`Atas prestasi sebagai ${achievement}.`);
+        } else if (event) {
+          line1Parts.push(`Atas partisipasi dalam ${event}.`);
+        }
+
+        displayDetailLine1.textContent = line1Parts.join(' ');
+
+        const date = dateInput.value;
+        const place = placeInput.value.trim();
+        let line2 = '';
+        if (date && place) line2 = `Diselenggarakan pada ${formatDate(date)} di ${place}.`;
+        else if (date) line2 = `Diselenggarakan pada ${formatDate(date)}.`;
+        else if (place) line2 = `Bertempat di ${place}.`;
+        displayDetailLine2.textContent = line2;
+
+        kepsekDisplayNama.textContent = kepsekNamaInput.value.trim() || 'Kepala Sekolah';
+        kepsekDisplayNip.textContent = kepsekNipInput.value.trim() ? `NIP. ${kepsekNipInput.value.trim()}` : '';
+        guruDisplayNama.textContent = guruNamaInput.value.trim() || 'Guru Pembimbing';
+        guruDisplayNip.textContent = guruNipInput.value.trim() ? `NIP. ${guruNipInput.value.trim()}` : '';
+        renderCustomFieldsDisplay();
+        requestAnimationFrame(fitContentLayout);
+      }
+
+      function formatDate(dateStr) { if(!dateStr) return ''; return new Date(dateStr).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}); }
+
+      function renderCustomFieldsDisplay() {
+        displayCustomFields.innerHTML = '';
+        customFields.forEach(f => { if(f.label.trim()||f.value.trim()) { const d=document.createElement('div'); d.className='custom-item'; d.textContent=`${f.label||'Item'}: ${f.value||''}`; displayCustomFields.appendChild(d); } });
+      }
+
+      function renderCustomFieldInputs() {
+        customFieldsContainer.innerHTML = '';
+        customFields.forEach(function(f, i) {
+          const row = document.createElement('div');
+          row.className = 'custom-field-row';
+
+          const labelInput = document.createElement('input');
+          labelInput.type = 'text';
+          labelInput.placeholder = 'Label';
+          labelInput.value = f.label || '';
+          labelInput.dataset.index = String(i);
+          labelInput.className = 'custom-label';
+
+          const valueInput = document.createElement('input');
+          valueInput.type = 'text';
+          valueInput.placeholder = 'Nilai';
+          valueInput.value = f.value || '';
+          valueInput.dataset.index = String(i);
+          valueInput.className = 'custom-value';
+
+          const removeBtn = document.createElement('button');
+          removeBtn.type = 'button';
+          removeBtn.className = 'remove-btn';
+          removeBtn.dataset.index = String(i);
+          removeBtn.title = 'Hapus';
+          removeBtn.textContent = '✕';
+
+          row.appendChild(labelInput);
+          row.appendChild(valueInput);
+          row.appendChild(removeBtn);
+          customFieldsContainer.appendChild(row);
+        });
+        document.querySelectorAll('.custom-label').forEach(inp => inp.addEventListener('input', function(e){ const i=parseInt(this.dataset.index); customFields[i].label=this.value; updateCertificateData(); }));
+        document.querySelectorAll('.custom-value').forEach(inp => inp.addEventListener('input', function(e){ const i=parseInt(this.dataset.index); customFields[i].value=this.value; updateCertificateData(); }));
+        document.querySelectorAll('.remove-btn').forEach(btn => btn.addEventListener('click', function(e){ const i=parseInt(this.dataset.index); customFields.splice(i,1); renderCustomFieldInputs(); updateCertificateData(); }));
+      }
+
+      function applyTemplateStyle() {
+        if (!certificateDiv.classList.contains('has-bg-template')) {
+          certificateDiv.style.borderColor = borderColorInput.value;
+          certificateDiv.style.outlineColor = outlineColorInput.value;
+        } else {
+          certificateDiv.style.borderColor = 'transparent';
+          certificateDiv.style.outlineColor = 'transparent';
+        }
+        certificateDiv.style.fontFamily = fontSelect.value;
+        ribbonDiv.style.backgroundColor = ribbonColorInput.value;
+        titleDiv.style.color = titleColorInput.value;
+        requestAnimationFrame(fitContentLayout);
+      }
+
+      function setTheme(t) {
+        switch(t){
+          case 'classic': borderColorInput.value='#ce1126'; outlineColorInput.value='#ffd700'; ribbonColorInput.value='#ce1126'; titleColorInput.value='#c62828'; fontSelect.value="'Georgia', serif"; break;
+          case 'colorful': borderColorInput.value='#e91e63'; outlineColorInput.value='#00bcd4'; ribbonColorInput.value='#ff9800'; titleColorInput.value='#9c27b0'; fontSelect.value="'Comic Sans MS', cursive"; break;
+          case 'green': borderColorInput.value='#2e7d32'; outlineColorInput.value='#ffeb3b'; ribbonColorInput.value='#1b5e20'; titleColorInput.value='#004d40'; fontSelect.value="'Georgia', serif"; break;
+          case 'modern': borderColorInput.value='#0d47a1'; outlineColorInput.value='#ffab00'; ribbonColorInput.value='#1565c0'; titleColorInput.value='#0d47a1'; fontSelect.value="'Segoe UI', sans-serif"; break;
+        }
+        applyTemplateStyle();
+      }
+
+      themeSelect.addEventListener('change', e => setTheme(e.target.value));
+      borderColorInput.addEventListener('input', applyTemplateStyle);
+      outlineColorInput.addEventListener('input', applyTemplateStyle);
+      ribbonColorInput.addEventListener('input', applyTemplateStyle);
+      titleColorInput.addEventListener('input', applyTemplateStyle);
+      fontSelect.addEventListener('change', applyTemplateStyle);
+
+      document.getElementById('addCustomField').addEventListener('click', ()=>{ customFields.push({label:'',value:''}); renderCustomFieldInputs(); updateCertificateData(); });
+
+      [schoolInput,nameInput,classSelect,eventInput,achievementSelect,dateInput,placeInput,kepsekNamaInput,kepsekNipInput,guruNamaInput,guruNipInput].forEach(el=>{ el.addEventListener('input',updateCertificateData); el.addEventListener('change',updateCertificateData); });
+
+      logoUpload.addEventListener('change', function(e){
+        const file=e.target.files[0];
+        if(file){ const r=new FileReader(); r.onload=function(ev){ logoImg.src=ev.target.result; logoImg.style.display='block'; logoFallback.style.display='none'; applyLogoSize(); }; r.readAsDataURL(file); }
+        else { logoImg.src=''; logoImg.style.display='none'; logoFallback.style.display='inline'; applyLogoSize(); }
+      });
+
+      function applyLogoPosition() {
+        logoContainer.style.left = logoPosition.x + '%';
+        logoContainer.style.top = logoPosition.y + '%';
+        if (logoPosX) logoPosX.value = logoPosition.x;
+        if (logoPosY) logoPosY.value = logoPosition.y;
+      }
+
+      function applyLogoSize() {
+        const scale = logoScale / 100;
+        logoImg.style.height = (3.2 * scale) + 'em';
+        logoFallback.style.fontSize = (0.72 * scale) + 'em';
+      }
+
+      function resetLogoPosition() {
+        logoPosition = { x: 4.5, y: 4 };
+        logoScale = 100;
+        if (logoSizeSlider) logoSizeSlider.value = 100;
+        applyLogoPosition();
+        applyLogoSize();
+      }
+
+      if (logoPosX) logoPosX.addEventListener('input', function() {
+        logoPosition.x = parseFloat(this.value);
+        applyLogoPosition();
+      });
+
+      if (logoPosY) logoPosY.addEventListener('input', function() {
+        logoPosition.y = parseFloat(this.value);
+        applyLogoPosition();
+      });
+
+      if (logoSizeSlider) logoSizeSlider.addEventListener('input', function() {
+        logoScale = parseInt(this.value, 10);
+        applyLogoSize();
+        requestAnimationFrame(fitContentLayout);
+      });
+
+      if (resetLogoPosBtn) resetLogoPosBtn.addEventListener('click', resetLogoPosition);
+
+      function clampLogoPosition(x, y) {
+        const certRect = certificateDiv.getBoundingClientRect();
+        const logoRect = logoContainer.getBoundingClientRect();
+        const maxX = Math.max(0, ((certRect.width - logoRect.width) / certRect.width) * 100);
+        const maxY = Math.max(0, ((certRect.height - logoRect.height) / certRect.height) * 100);
+        return {
+          x: Math.min(maxX, Math.max(0, x)),
+          y: Math.min(maxY, Math.max(0, y))
+        };
+      }
+
+      function setLogoPositionFromPointer(clientX, clientY) {
+        const certRect = certificateDiv.getBoundingClientRect();
+        const logoRect = logoContainer.getBoundingClientRect();
+        const x = ((clientX - certRect.left - logoRect.width / 2) / certRect.width) * 100;
+        const y = ((clientY - certRect.top - logoRect.height / 2) / certRect.height) * 100;
+        logoPosition = clampLogoPosition(x, y);
+        applyLogoPosition();
+      }
+
+      function startLogoDrag(e) {
+        if (e.type === 'mousedown' && e.button !== 0) return;
+        isDraggingLogo = true;
+        logoContainer.classList.add('dragging');
+        e.preventDefault();
+      }
+
+      function moveLogoDrag(e) {
+        if (!isDraggingLogo) return;
+        const point = e.touches ? e.touches[0] : e;
+        setLogoPositionFromPointer(point.clientX, point.clientY);
+        e.preventDefault();
+      }
+
+      function endLogoDrag() {
+        if (!isDraggingLogo) return;
+        isDraggingLogo = false;
+        logoContainer.classList.remove('dragging');
+      }
+
+      logoContainer.addEventListener('mousedown', startLogoDrag);
+      logoContainer.addEventListener('touchstart', startLogoDrag, { passive: false });
+      document.addEventListener('mousemove', moveLogoDrag);
+      document.addEventListener('touchmove', moveLogoDrag, { passive: false });
+      document.addEventListener('mouseup', endLogoDrag);
+      document.addEventListener('touchend', endLogoDrag);
+      document.addEventListener('touchcancel', endLogoDrag);
+
+      applyLogoPosition();
+      applyLogoSize();
+
+      templateUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          applyCustomTemplateImage(ev.target.result);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      overlaySlider.addEventListener('input', function() {
+        setOverlayOpacity(parseInt(this.value, 10));
+      });
+
+      document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+
+      function isFileProtocol() {
+        return location.protocol === 'file:';
+      }
+
+      function showFileProtocolWarning() {
+        if (isFileProtocol() && window.self === window.top) {
+          document.getElementById('fileProtocolBanner').style.display = 'block';
+        }
+      }
+
+      function copyInlineStyles(source, target) {
+        const win = source.ownerDocument.defaultView;
+        if (!win) return;
+        const computed = win.getComputedStyle(source);
+        let cssText = '';
+        for (let i = 0; i < computed.length; i++) {
+          const name = computed[i];
+          cssText += name + ':' + computed.getPropertyValue(name) + ';';
+        }
+        target.setAttribute('style', cssText);
+        const srcChildren = source.children;
+        const tgtChildren = target.children;
+        for (let i = 0; i < srcChildren.length; i++) {
+          if (tgtChildren[i]) copyInlineStyles(srcChildren[i], tgtChildren[i]);
+        }
+      }
+
+      function exportPngNative(element, scale) {
+        scale = scale || 2;
+        const w = element.offsetWidth;
+        const h = element.offsetHeight;
+        const clone = element.cloneNode(true);
+        copyInlineStyles(element, clone);
+        clone.style.transform = 'none';
+        clone.style.maxWidth = w + 'px';
+        clone.style.width = w + 'px';
+        clone.style.height = h + 'px';
+
+        const xhtml = 'http://www.w3.org/1999/xhtml';
+        const wrapper = document.createElement('div');
+        wrapper.setAttribute('xmlns', xhtml);
+        wrapper.setAttribute('style', 'width:' + w + 'px;height:' + h + 'px;margin:0;padding:0;overflow:hidden;background:#fff;');
+        wrapper.appendChild(clone);
+
+        const svgMarkup = '<svg xmlns="http://www.w3.org/2000/svg" width="' + (w * scale) + '" height="' + (h * scale) + '">' +
+          '<foreignObject x="0" y="0" width="' + w + '" height="' + h + '" transform="scale(' + scale + ')">' +
+          new XMLSerializer().serializeToString(wrapper) +
+          '</foreignObject></svg>';
+
+        const blob = new Blob([svgMarkup], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+
+        return new Promise(function(resolve, reject) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = w * scale;
+            canvas.height = h * scale;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+            resolve(canvas);
+          };
+          img.onerror = function(err) {
+            URL.revokeObjectURL(url);
+            reject(err);
+          };
+          img.src = url;
+        });
+      }
+
+      function loadHtml2Canvas() {
+        return new Promise(function(resolve, reject) {
+          if (typeof window.html2canvas === 'function') {
+            resolve(window.html2canvas);
+            return;
+          }
+          const script = document.createElement('script');
+          script.src = 'html2canvas.min.js';
+          script.onload = function() { resolve(window.html2canvas); };
+          script.onerror = function() { reject(new Error('html2canvas gagal dimuat')); };
+          document.head.appendChild(script);
+        });
+      }
+
+      function triggerPngDownload(canvas) {
+        const link = document.createElement('a');
+        link.download = 'sertifikat.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }
+
+      function downloadCertificatePng() {
+        const certElement = document.getElementById('certificate');
+        const prevTransform = certElement.style.transform;
+        certElement.style.transform = '';
+
+        function restoreTransform() {
+          certElement.style.transform = prevTransform;
+        }
+
+        if (isFileProtocol()) {
+          exportPngNative(certElement, 2).then(function(canvas) {
+            restoreTransform();
+            triggerPngDownload(canvas);
+          }).catch(function() {
+            restoreTransform();
+            alert('Download PNG gagal di file://.\n\nJalankan JALANKAN.bat lalu buka http://localhost:8080\nAtau gunakan Cetak / PDF.');
+          });
+          return;
+        }
+
+        loadHtml2Canvas().then(function(html2canvas) {
+          return html2canvas(certElement, {
+            scale: 2,
+            backgroundColor: '#ffffff',
+            allowTaint: true,
+            useCORS: true,
+            logging: false
+          });
+        }).then(function(canvas) {
+          restoreTransform();
+          triggerPngDownload(canvas);
+        }).catch(function(error) {
+          restoreTransform();
+          console.error('Gagal mengunduh PNG:', error);
+          exportPngNative(certElement, 2).then(function(canvas) {
+            triggerPngDownload(canvas);
+          }).catch(function() {
+            alert('Gagal mengunduh gambar. Jalankan JALANKAN.bat lalu buka http://localhost:8080');
+          });
+        });
+      }
+
+      document.getElementById('downloadPngBtn').addEventListener('click', downloadCertificatePng);
+
+      // Inisialisasi
+      try {
+        showFileProtocolWarning();
+        renderTemplateGrid();
+        applyCertTemplate('plain');
+      } catch (err) {
+        console.error('Gagal memuat template:', err);
+        if (templateGrid) {
+          templateGrid.innerHTML = '<p style="color:#b71c1c;font-size:13px;">Template gagal dimuat. Refresh halaman.</p>';
+        }
+      }
+      nameInput.value='Aisyah Putri'; schoolInput.value='SD Pelita Bangsa'; classSelect.value='4'; eventInput.value='Lomba Puisi Nasional'; achievementSelect.value='Juara 1'; dateInput.value='2026-05-20'; placeInput.value='Gedung Serbaguna Merdeka';
+      kepsekNamaInput.value='Budi Santoso, S.Pd.'; kepsekNipInput.value='19651234 198703 1 001'; guruNamaInput.value='Ratna Dewi, S.Pd.'; guruNipInput.value='19820711 200604 2 005';
+      borderColorInput.value='#2e7d32'; outlineColorInput.value='#ffd700'; ribbonColorInput.value='#1b5e20'; titleColorInput.value='#004d40';
+      updateCertificateData();
+      logoFallback.style.display='inline';
+      setOrientation('landscape');
+      setPaperSize('A4');
+      updateTextSizeLabel();
+      applySignAreaOffset();
+    })();
+  </script>
+</body>
+</html>
